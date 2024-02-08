@@ -11,6 +11,7 @@ import LogDive from './pages/LogDive';
 import DiveSites from './pages/DiveSites';
 import AddDiveSite from './pages/AddDiveSite';
 import Footer from './components/Footer';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 import './App.css';
 
 function App() {
@@ -46,13 +47,13 @@ function App() {
       }
       <main>
         <Routes>
-          <Route path="/" element={<Landing user={user} setUser={setUser}/>} />
-          <Route path="/hub" element={<Hub />} />
-          <Route path="/profile-settings" element={<ProfileSettings />} />
-          <Route path="/dives" element={<Dives />} />
-          <Route path="/log-dive" element={<LogDive />} />
-          <Route path="/dive-sites" element={<DiveSites />} />
-          <Route path="/add-dive-site" element={<AddDiveSite />} />
+        <Route path="/" element={<Landing user={user} setUser={setUser}/>} />
+          <Route path="/hub" element={<ProtectedRoute user={user}><Hub /></ProtectedRoute>} />
+          <Route path="/profile-settings" element={<ProtectedRoute user={user}><ProfileSettings /></ProtectedRoute>} />
+          <Route path="/dives" element={<ProtectedRoute user={user}><Dives /></ProtectedRoute>} />
+          <Route path="/log-dive" element={<ProtectedRoute user={user}><LogDive /></ProtectedRoute>} />
+          <Route path="/dive-sites" element={<ProtectedRoute user={user}><DiveSites /></ProtectedRoute>} />
+          <Route path="/add-dive-site" element={<ProtectedRoute user={user}><AddDiveSite /></ProtectedRoute>} />
         </Routes>
       </main>
       <footer>
