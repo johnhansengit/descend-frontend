@@ -4,8 +4,6 @@ import { useState, useEffect } from 'react';
 import { CheckSession } from './services/Auth'
 import Nav from './components/Nav';
 import Landing from './pages/Landing';
-import Register from './components/auth/Register';
-import SignIn from './components/auth/SignIn';
 import Hub from './pages/Hub';
 import './App.css';
 
@@ -38,10 +36,8 @@ function App() {
       </header>
       <main>
         <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/signin" element={<SignIn setUser={setUser} />} />
-          <Route path="/hub" element={<Hub user={user}/>} />
+          <Route path="/" element={<Landing user={user} setUser={setUser}/>} />
+          <Route path="/hub" element={<Hub />} />
         </Routes>
       </main>
       <footer>

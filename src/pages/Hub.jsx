@@ -1,9 +1,9 @@
 
 
-const Hub = ({ user }) => {
+const Hub = () => {
   return (
     <div>
-      Logged In!
+      The Hub
     </div>
   )
 }

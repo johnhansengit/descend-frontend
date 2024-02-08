@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RegisterUser } from '../../services/Auth'
 
-const Register = () => {
+const Register = ({ setAuthForm, setRegisteredEmail }) => {
 
   let navigate = useNavigate()
 
@@ -18,36 +18,42 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    await RegisterUser({
+    const registeredUser = await RegisterUser({
       email: formValues.email,
       password: formValues.password
     })
+    if (registeredUser) {
+      setRegisteredEmail(formValues.email)
+      setAuthForm('signin')
+    }
     setFormValues({
       email: '',
       password: '',
       confirmPassword: ''
     })
-    navigate('/signin')
+    navigate('/')
   }
 
   return (
-    <>
+    <div>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="email">Email</label>
+          <label htmlFor="registerEmail">Email</label>
           <input
             onChange={handleChange}
+            id="registerEmail"
             name="email"
             type="email"
-            placeholder="example@example.com"
             value={formValues.email}
             required
+            autoComplete='on'
           />
         </div>
         <div>
-          <label htmlFor="password">Password</label>
+          <label htmlFor="registerPassword">Password</label>
           <input
             onChange={handleChange}
+            id="registerPassword"
             type="password"
             name="password"
             value={formValues.password}
@@ -55,9 +61,10 @@ const Register = () => {
           />
         </div>
         <div>
-          <label htmlFor="confirmPassword">Confirm Password</label>
+          <label htmlFor="registerConfirmPassword">Confirm Password</label>
           <input
             onChange={handleChange}
+            id="registerConfirmPassword"
             type="password"
             name="confirmPassword"
             value={formValues.confirmPassword}
@@ -71,10 +78,10 @@ const Register = () => {
               formValues.confirmPassword === formValues.password)
           }
         >
-          Sign In
+          Register
         </button>
       </form>
-    </>
+    </div>
   )
 }
 

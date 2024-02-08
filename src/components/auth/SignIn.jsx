@@ -2,11 +2,14 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { SignInUser } from '../../services/Auth'
 
-const SignIn = ({ setUser }) => {
+const SignIn = ({ setUser, prePopulatedEmail }) => {
   
     let navigate = useNavigate()
 
-    const [formValues, setFormValues] = useState({ email: '', password: '' })
+    const [formValues, setFormValues] = useState({ 
+        email: prePopulatedEmail || '', 
+        password: '' 
+    })
 
     const handleChange = (e) => {
         setFormValues({ ...formValues, [e.target.name]: e.target.value })
@@ -22,34 +25,34 @@ const SignIn = ({ setUser }) => {
 
     return (
         <div>
-        <div>
             <form onSubmit={handleSubmit}>
-            <div className="input-wrapper">
-                <label htmlFor="email">Email</label>
+            <div>
+                <label htmlFor="signinEmail">Email</label>
                 <input
-                onChange={handleChange}
-                name="email"
-                type="email"
-                placeholder="example@example.com"
-                value={formValues.email}
-                required
+                    onChange={handleChange}
+                    id="signinEmail"
+                    name="email"
+                    type="email"
+                    value={formValues.email}
+                    required
+                    autoComplete='on'
                 />
             </div>
-            <div className="input-wrapper">
-                <label htmlFor="password">Password</label>
+            <div>
+                <label htmlFor="signinPassword">Password</label>
                 <input
-                onChange={handleChange}
-                type="password"
-                name="password"
-                value={formValues.password}
-                required
+                    onChange={handleChange}
+                    id="signinPassword"
+                    type="password"
+                    name="password"
+                    value={formValues.password}
+                    required
                 />
             </div>
             <button disabled={!formValues.email || !formValues.password}>
                 Sign In
             </button>
             </form>
-        </div>
         </div>
     )
 }
