@@ -75,6 +75,7 @@ DESCEND is strives to be the best dive log app on the market, and the only one t
 - Diving weight calculator that takes into account changes in body composition, water salinity, equipment, and time since last dive
 - Badges to mark diving milestones and accomplishments
 - Tec Diving integration
+- Certification standards for junior divers, Master Scuba Diver, specialty instructors and higher-level instructors
 - Certification standards for additional dive agencies
 
 #### **_Credits_**
