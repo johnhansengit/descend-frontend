@@ -5,6 +5,7 @@ import { CheckSession } from './services/Auth'
 import Nav from './components/Nav';
 import Landing from './pages/Landing';
 import Hub from './pages/Hub';
+import Footer from './components/Footer';
 import './App.css';
 
 function App() {
@@ -31,9 +32,13 @@ function App() {
   
   return (
     <>
-      <header>
-        <Nav user={user} handleLogOut={handleLogOut}/>
-      </header>
+      {user ? 
+        <header>
+          <Nav user={user} handleLogOut={handleLogOut}/>
+        </header>
+        :
+        null
+      }
       <main>
         <Routes>
           <Route path="/" element={<Landing user={user} setUser={setUser}/>} />
@@ -41,7 +46,7 @@ function App() {
         </Routes>
       </main>
       <footer>
-        {/* Footer content */}
+        <Footer />
       </footer>
     </>
   );
