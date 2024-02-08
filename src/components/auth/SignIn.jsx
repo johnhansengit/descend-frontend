@@ -11,17 +11,25 @@ const SignIn = ({ setUser, prePopulatedEmail }) => {
         password: '' 
     })
 
+    const [signInError, setSignInError] = useState('');
+
     const handleChange = (e) => {
         setFormValues({ ...formValues, [e.target.name]: e.target.value })
     }
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
-        const payload = await SignInUser(formValues)
-        setFormValues({ email: '', password: '' })
-        setUser(payload)
-        navigate('/hub')
-    }
+        e.preventDefault();
+        try {
+            const payload = await SignInUser(formValues);
+            setUser(payload);
+            navigate('/hub');
+        } catch (error) {
+            const errorMessage = error.response?.data?.msg || "An unexpected error occurred";
+            setSignInError(errorMessage);
+        }
+        setFormValues({ ...formValues, password: '' });
+    };
+    
 
     return (
         <div>
@@ -48,6 +56,9 @@ const SignIn = ({ setUser, prePopulatedEmail }) => {
                     value={formValues.password}
                     required
                 />
+            </div>
+            <div>
+                {signInError && <p>{signInError}</p>}
             </div>
             <button disabled={!formValues.email || !formValues.password}>
                 Sign In

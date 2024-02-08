@@ -7,6 +7,7 @@ export const SignInUser = async (data) => {
     return res.data.user
   } catch (error) {
     console.log("SignInUser error: "+error)
+    throw error
   }
 }
 
@@ -16,6 +17,7 @@ export const RegisterUser = async (data) => {
     return res.data
   } catch (error) {
     console.log("RegisterUser error: "+error)
+    throw error
   }
 }
 
@@ -25,5 +27,6 @@ export const CheckSession = async () => {
     return res.data
   } catch (error) {
     console.log("CheckSession error: "+error)
+    throw error
   }
 }
