@@ -1,11 +1,12 @@
 import ProfileForm from '../components/forms/ProfileForm'
-import SettingsForm from '../components/forms/SettingsForm'
+import ChangePasswordForm from '../components/forms/ChangePasswordForm'
 import CertificatesForm from '../components/forms/CertificatesForm'
+import SettingsForm from '../components/forms/SettingsForm'
 
 const ProfileSettings = () => {
 
     
-    
+
     return (
         <div>
             <div>
@@ -13,6 +14,9 @@ const ProfileSettings = () => {
             </div>
             <div>
                 <ProfileForm />
+            </div>
+            <div>
+                <ChangePasswordForm />
             </div>
             <div>
                 <CertificatesForm />
