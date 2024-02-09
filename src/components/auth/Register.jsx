@@ -1,22 +1,27 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RegisterUser } from '../../services/Auth';
+import { CheckUserName } from '../../services/Auth';
 
-const Register = ({ setAuthForm, setRegisteredEmail }) => {
+const Register = ({ setAuthForm, setRegisteredUserName }) => {
   let navigate = useNavigate();
 
   const [formValues, setFormValues] = useState({
-    email: '',
+    userName: '',
     password: '',
     confirmPassword: ''
   });
 
   const [passwordErrors, setPasswordErrors] = useState([]);
-  const [emailError, setEmailError] = useState('');
+  const [userNameError, setUserNameError] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
   const handleChange = (e) => {
     setIsTyping(true);
+    let value = e.target.value;
+    if (e.target.name === 'userName' && /\s/.test(value)) {
+      return; // Don't update the userName field if the new value contains spaces
+    }
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
   };
 
@@ -29,19 +34,25 @@ const Register = ({ setAuthForm, setRegisteredEmail }) => {
   };
 
   useEffect(() => {
-    const debouncedEmailValidation = debounce(() => {
-      const regex = /\S+@\S+\.\S+/;
-      if (formValues.email && !regex.test(formValues.email)) {
-        setEmailError("Valid email required.");
-      } else {
-        setEmailError('');
+    const debouncedUserNameCheck = debounce(async () => {
+      if (formValues.userName) {
+        try {
+          const exists = await CheckUserName(formValues.userName);
+          if (exists) {
+            setUserNameError('Username already exists');
+          } else {
+            setUserNameError('');
+          }
+        } catch (error) {
+          console.error('Error checking username:', error);
+        }
       }
     }, 1000);
 
     if (isTyping) {
-      debouncedEmailValidation();
+      debouncedUserNameCheck();
     }
-  }, [formValues.email, isTyping]);
+  }, [formValues.userName, isTyping]);
 
   useEffect(() => {
     const debouncedPasswordValidation = debounce(() => {
@@ -73,53 +84,52 @@ const Register = ({ setAuthForm, setRegisteredEmail }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (emailError || passwordErrors.length > 0) {
+    if (userNameError || passwordErrors.length > 0) {
       return;
     }
     try {
       const registeredUser = await RegisterUser({
-        email: formValues.email,
+        userName: formValues.userName,
         password: formValues.password
       });
       if (registeredUser) {
-        setRegisteredEmail(formValues.email);
+        setRegisteredUserName(formValues.userName);
         setAuthForm('signin');
         navigate('/');
       }
     } catch (error) {
       const errorMessage = error.response?.data?.msg || "An unexpected error occurred";
       if (errorMessage.includes("email")) {
-        setEmailError(errorMessage);
+        setUserNameError(errorMessage);
       } else {
         setPasswordErrors([errorMessage]);
       }
     }
     setFormValues({
-      email: '',
+      userName: '',
       password: '',
       confirmPassword: ''
     });
     setIsTyping(false);
   };
-  
+
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="registerEmail">Email</label>
+          <label htmlFor="registerUserName">User Name</label>
           <input
             onChange={handleChange}
-            id="registerEmail"
-            name="email"
-            type="email"
-            value={formValues.email}
+            id="registerUserName"
+            name="userName"
+            type="string"
+            value={formValues.userName}
             required
-            autoComplete='on'
           />
         </div>
         <div>
-          {emailError && <p>{emailError}</p>}
+          {userNameError && <p>{userNameError}</p>}
         </div>
         <div>
           <label htmlFor="registerPassword">Password</label>
@@ -146,7 +156,7 @@ const Register = ({ setAuthForm, setRegisteredEmail }) => {
         <div>
           {passwordErrors.map((error, index) => <p key={index}>{error}</p>)}
         </div>
-        <button disabled={emailError || passwordErrors.length > 0}>
+        <button disabled={userNameError || passwordErrors.length > 0}>
           Register
         </button>
       </form>

@@ -8,7 +8,7 @@ const Landing = ({ user, setUser }) => {
   let navigate = useNavigate()
 
   const [authForm, setAuthForm] = useState('signin')
-  const [registeredEmail, setRegisteredEmail] = useState('');
+  const [registeredUserName, setRegisteredUserName] = useState('');
 
   return (
     <div>
@@ -26,7 +26,7 @@ const Landing = ({ user, setUser }) => {
                 {authForm === 'signin' ?
                     <div>
                         <div>
-                            <SignIn setUser={setUser} prePopulatedEmail={registeredEmail} />
+                            <SignIn setUser={setUser} prePopulatedUserName={registeredUserName} />
                         </div>
                         <div>
                             <button onClick={() => setAuthForm('register')}>
@@ -36,7 +36,7 @@ const Landing = ({ user, setUser }) => {
                     </div>
                     :
                     <div>
-                        <Register setAuthForm={setAuthForm} setRegisteredEmail={setRegisteredEmail} />
+                        <Register setAuthForm={setAuthForm} setRegisteredUserName={setRegisteredUserName} />
                     </div>
                 }
             </div>

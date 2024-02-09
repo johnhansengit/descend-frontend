@@ -21,6 +21,16 @@ export const RegisterUser = async (data) => {
   }
 }
 
+export const CheckUserName = async (userName) => {
+  try {
+    const res = await Client.post('/auth/checkUserName', { userName })
+    return res.data.exists
+  } catch (error) {
+    console.log("CheckUserName error: "+error)
+    throw error
+  }
+}
+
 export const CheckSession = async () => {
   try {
     const res = await Client.get('/auth/session')

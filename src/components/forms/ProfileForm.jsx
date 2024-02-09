@@ -23,7 +23,7 @@ const ProfileForm = () => {
         const fetchProfile = async () => {
             try {
                 const response = await Client.get('/api/profile');
-                if (response.data) {
+                if (response.data && Object.keys(response.data).length > 0) {
                     setProfileExists(true);
                     Object.keys(response.data).forEach(key => {
                         setValue(key, response.data[key]);
@@ -33,7 +33,7 @@ const ProfileForm = () => {
                 console.error('Error fetching profile data:', error);
             }
         };
-
+    
         fetchProfile();
     }, [setValue]);
 
@@ -72,6 +72,7 @@ const ProfileForm = () => {
 
     return (
         <div>
+            <h2>Profile</h2>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label htmlFor="profileFirstName">First Name:</label>

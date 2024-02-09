@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { SignInUser } from '../../services/Auth'
 
-const SignIn = ({ setUser, prePopulatedEmail }) => {
+const SignIn = ({ setUser, prePopulatedUserName }) => {
   
     let navigate = useNavigate()
 
     const [formValues, setFormValues] = useState({ 
-        email: prePopulatedEmail || '', 
+        userName: prePopulatedUserName || '', 
         password: '' 
     })
 
@@ -35,13 +35,13 @@ const SignIn = ({ setUser, prePopulatedEmail }) => {
         <div>
             <form onSubmit={handleSubmit}>
             <div>
-                <label htmlFor="signinEmail">Email</label>
+                <label htmlFor="signinUserName">User Name</label>
                 <input
                     onChange={handleChange}
-                    id="signinEmail"
-                    name="email"
-                    type="email"
-                    value={formValues.email}
+                    id="signinUserName"
+                    name="userName"
+                    type="string"
+                    value={formValues.userName}
                     required
                     autoComplete='on'
                 />
@@ -60,7 +60,7 @@ const SignIn = ({ setUser, prePopulatedEmail }) => {
             <div>
                 {signInError && <p>{signInError}</p>}
             </div>
-            <button disabled={!formValues.email || !formValues.password}>
+            <button disabled={!formValues.userName || !formValues.password}>
                 Sign In
             </button>
             </form>
