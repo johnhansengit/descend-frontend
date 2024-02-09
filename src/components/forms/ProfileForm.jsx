@@ -40,7 +40,7 @@ const ProfileForm = () => {
                 profileData.append(key, data[key]);
             }
         });
-        
+
         try {
             const response = await Client.post('/api/profile', profileData);
             console.log('Profile created:', response.data);
@@ -53,10 +53,6 @@ const ProfileForm = () => {
     return (
         <div>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div>
-                    <label htmlFor="profileUserName">User Name:</label>
-                    <input id="profileUserName" {...register('userName')} />
-                </div>
                 <div>
                     <label htmlFor="profileFirstName">First Name:</label>
                     <input id="profileFirstName" {...register('firstName')} />
@@ -80,11 +76,11 @@ const ProfileForm = () => {
                         <option value="ft/in">ft/in</option>
                     </select>
                     {heightUnit === 'cm' ? (
-                        <input id="profileHeightCm" {...register('heightCm')} />
+                        <input id="profileHeightCm" type="number" min="0" step="1" {...register('heightCm')} />
                     ) : (
                         <>
-                            <input id="profileHeightFt" {...register('heightFt')} placeholder="ft" />
-                            <input id="profileHeightIn" {...register('heightIn')} placeholder="in" />
+                            <input id="profileHeightFt" type="number" min="0" step="1" placeholder="ft" {...register('heightFt')} />
+                            <input id="profileHeightIn" type="number" min="0" step="1" placeholder="in" {...register('heightIn')} />
                         </>
                     )}
                 </div>
@@ -94,7 +90,7 @@ const ProfileForm = () => {
                         <option value="kg">kg</option>
                         <option value="lbs">lbs</option>
                     </select>
-                    <input id="profileWeight" {...register('weight')} />
+                    <input id="profileWeight" type="number" min="0" step="1" {...register('weight')} />
                 </div>
                 <div>
                     <label htmlFor="profileAgency">Diver Certification Agency:</label>
