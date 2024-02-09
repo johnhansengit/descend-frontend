@@ -17,6 +17,7 @@ import './App.css';
 function App() {
 
   const [user, setUser] = useState(null)
+  const [isDirty, setIsDirty] = useState(false);
 
   const checkToken = async () => {
     const user = await CheckSession()
@@ -49,11 +50,11 @@ function App() {
         <Routes>
         <Route path="/" element={<Landing user={user} setUser={setUser}/>} />
           <Route path="/hub" element={<ProtectedRoute user={user}><Hub /></ProtectedRoute>} />
-          <Route path="/profile-settings" element={<ProtectedRoute user={user}><ProfileSettings /></ProtectedRoute>} />
+          <Route path="/profile-settings" element={<ProtectedRoute user={user}><ProfileSettings isDirty={isDirty} setIsDirty={setIsDirty} /></ProtectedRoute>} />
           <Route path="/dives" element={<ProtectedRoute user={user}><Dives /></ProtectedRoute>} />
-          <Route path="/log-dive" element={<ProtectedRoute user={user}><LogDive /></ProtectedRoute>} />
+          <Route path="/log-dive" element={<ProtectedRoute user={user}><LogDive isDirty={isDirty} setIsDirty={setIsDirty} /></ProtectedRoute>} />
           <Route path="/dive-sites" element={<ProtectedRoute user={user}><DiveSites /></ProtectedRoute>} />
-          <Route path="/add-dive-site" element={<ProtectedRoute user={user}><AddDiveSite /></ProtectedRoute>} />
+          <Route path="/add-dive-site" element={<ProtectedRoute user={user}><AddDiveSite isDirty={isDirty} setIsDirty={setIsDirty} /></ProtectedRoute>} />
         </Routes>
       </main>
       <footer>
