@@ -1,10 +1,13 @@
+import { useStore } from '../services/store'
 import ProfilePic from '../components/forms/ProfilePic'
 import ProfileForm from '../components/forms/ProfileForm'
-import ChangePasswordForm from '../components/forms/ChangePasswordForm'
+import ChangeEmailPasswordForm from '../components/forms/ChangeEmailPasswordForm'
 import CertificatesForm from '../components/forms/CertificatesForm'
 import SettingsForm from '../components/forms/SettingsForm'
 
-const ProfileSettings = ({ isDirty, setIsDirty}) => {
+const ProfileSettings = () => {
+
+    const { isDirty } = useStore();
 
     return (
         <div>
@@ -18,16 +21,16 @@ const ProfileSettings = ({ isDirty, setIsDirty}) => {
                 {isDirty ? <p>Don&apos;t forget to save your changes!</p> : null}
             </div>
             <div>
-                <ProfileForm isDirty={isDirty} setIsDirty={setIsDirty} />
+                <ProfileForm />
             </div>
             <div>
-                <ChangePasswordForm isDirty={isDirty} setIsDirty={setIsDirty} />
+                <ChangeEmailPasswordForm />
             </div>
             <div>
-                <CertificatesForm isDirty={isDirty} setIsDirty={setIsDirty} />
+                <CertificatesForm />
             </div>
             <div>
-                <SettingsForm isDirty={isDirty} setIsDirty={setIsDirty} />
+                <SettingsForm />
             </div>
         </div>
     )
