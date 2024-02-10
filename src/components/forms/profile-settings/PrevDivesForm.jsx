@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Client from '../../services/api';
+import Client from '../../../services/api';
 import { useForm } from 'react-hook-form';
 
 const PrevDivesForm = ({ userId }) => {
@@ -49,6 +49,7 @@ const PrevDivesForm = ({ userId }) => {
     <div>
       <h2>Previous Dives</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
+        {/* Open Water Dives */}
         {diveTypes
           .filter((diveType) => diveType.id === 1)
           .map((diveType) => (
@@ -62,6 +63,7 @@ const PrevDivesForm = ({ userId }) => {
               />
             </div>
           ))}
+        {/* Deep Dives */}
         {diveTypes
           .filter((diveType) => diveType.id === 7)
           .map((diveType) => (
@@ -75,8 +77,22 @@ const PrevDivesForm = ({ userId }) => {
               />
             </div>
           ))}
+        {/* Discover Dives */}
         {diveTypes
-          .filter((diveType) => diveType.id !== 1 && diveType.id !== 7)
+          .filter((diveType) => diveType.id === 24)
+          .map((diveType) => (
+            <div key={diveType.id}>
+              <label htmlFor={`diveType-${diveType.id}`}>{diveType.diveType}</label>
+              <input
+                id={`diveType-${diveType.id}`}
+                type="number"
+                min="0"
+                {...register(`diveType${diveType.id}`, { valueAsNumber: true })}
+              />
+            </div>
+          ))}
+        {diveTypes
+          .filter((diveType) => diveType.id !== 1 && diveType.id !== 7 && diveType.id !== 24)
           .sort((a, b) => a.diveType.localeCompare(b.diveType))
           .map((diveType) => (
             <div key={diveType.id}>

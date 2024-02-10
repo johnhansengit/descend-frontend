@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import Client from '../../services/api';
+import Client from '../../../services/api';
 import { useForm } from 'react-hook-form';
-import { useStore } from '../../services/store';
+import { useStore } from '../../../services/store';
 
 const ProfileForm = () => {
 

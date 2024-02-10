@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Client from '../../services/api';
+import Client from '../../../services/api';
 import { useForm } from 'react-hook-form';
 
 const SettingsForm = ({ userId }) => {

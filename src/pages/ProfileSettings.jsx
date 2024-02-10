@@ -1,22 +1,22 @@
 import { Link, Element } from 'react-scroll';
-import ProfilePic from '../components/forms/ProfilePic'
+import ProfilePic from '../components/forms/profile-settings/ProfilePic'
 import DirtyAlert from '../components/forms/DirtyAlert'
-import ProfileForm from '../components/forms/ProfileForm'
-import CertificatesForm from '../components/forms/CertificatesForm'
-import PrevDivesForm from '../components/forms/PrevDivesForm'
-import SettingsForm from '../components/forms/SettingsForm'
-import ChangeUserInfoForm from '../components/forms/ChangeUserInfoForm'
+import ProfileForm from '../components/forms/profile-settings/ProfileForm'
+import CertificatesForm from '../components/forms/profile-settings/CertificatesForm'
+import PrevDivesForm from '../components/forms/profile-settings/PrevDivesForm'
+import SettingsForm from '../components/forms/profile-settings/SettingsForm'
+import ChangeUserInfoForm from '../components/forms/profile-settings/ChangeUserInfoForm'
 
 const ProfileSettings = () => {
 
     return (
         <div>
             <div>
-                <ProfilePic />
-                User Name
+                <h1>Profile & Settings</h1>
             </div>
             <div>
-                <h1>Profile & Settings</h1>
+                <ProfilePic />
+                User Name
             </div>
             <div>
                 <DirtyAlert />
