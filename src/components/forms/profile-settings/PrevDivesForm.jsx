@@ -20,10 +20,12 @@ const PrevDivesForm = ({ userId }) => {
     const fetchPrevDivesData = async () => {
       try {
         const response = await Client.get('/api/stats/');
-        setPrevDivesData(response.data);
-        response.data.forEach(dive => {
-          setValue(`diveType${dive.diveTypeId}`, dive.previousDives);
-        });
+        if (response.data && Object.keys(response.data).length > 0) {
+          setPrevDivesData(response.data);
+          response.data.forEach(dive => {
+            setValue(`diveType-${dive.diveTypeId}`, dive.previousDives || 0);
+          });
+        }
       } catch (error) {
         console.error('Error fetching previous dives data:', error);
       }
@@ -34,11 +36,19 @@ const PrevDivesForm = ({ userId }) => {
   }, [userId, setValue]);
 
   const onSubmit = async (data) => {
+    const formattedData = Object.keys(data).map(key => {
+      const diveTypeId = parseInt(key.replace('diveType-', ''), 10);
+      return {
+        diveTypeId,
+        previousDives: data[key],
+      };
+    });
+    
     try {
       if (prevDivesData) {
-        await Client.put(`/api/stats/${userId}`, data);
+        await Client.put('/api/stats/', formattedData);
       } else {
-        await Client.post(`/api/stats/${userId}`, data);
+        await Client.post('/api/stats/', formattedData);
       }
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -57,9 +67,10 @@ const PrevDivesForm = ({ userId }) => {
               <label htmlFor={`diveType-${diveType.id}`}>{diveType.diveType}</label>
               <input
                 id={`diveType-${diveType.id}`}
+                name={`diveType-${diveType.id}`}
                 type="number"
                 min="0"
-                {...register(`diveType${diveType.id}`, { valueAsNumber: true })}
+                {...register(`diveType-${diveType.id}`, { valueAsNumber: true })}
               />
             </div>
           ))}
@@ -71,23 +82,25 @@ const PrevDivesForm = ({ userId }) => {
               <label htmlFor={`diveType-${diveType.id}`}>{diveType.diveType}</label>
               <input
                 id={`diveType-${diveType.id}`}
+                name={`diveType-${diveType.id}`}
                 type="number"
                 min="0"
-                {...register(`diveType${diveType.id}`, { valueAsNumber: true })}
+                {...register(`diveType-${diveType.id}`, { valueAsNumber: true })}
               />
             </div>
           ))}
         {diveTypes
-          .filter((diveType) => diveType.id !== 1 && diveType.id !== 7)
+          .filter((diveType) => diveType.id !== 1 && diveType.id !== 7 && diveType.id !== 24)
           .sort((a, b) => a.diveType.localeCompare(b.diveType))
           .map((diveType) => (
             <div key={diveType.id}>
               <label htmlFor={`diveType-${diveType.id}`}>{diveType.diveType}</label>
               <input
                 id={`diveType-${diveType.id}`}
+                name={`diveType-${diveType.id}`}
                 type="number"
                 min="0"
-                {...register(`diveType${diveType.id}`, { valueAsNumber: true })}
+                {...register(`diveType-${diveType.id}`, { valueAsNumber: true })}
               />
             </div>
           ))}

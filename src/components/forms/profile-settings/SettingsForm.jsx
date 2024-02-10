@@ -33,8 +33,8 @@ const SettingsForm = () => {
       <h2>Settings</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <label htmlFor="theme">Theme</label>
-          <select id="theme" {...register('theme')}>
+          <label htmlFor="settingsTheme">Theme</label>
+          <select id="settingsTheme" {...register('theme')}>
             <option value="Blue Hole">Blue Hole</option>
             <option value="Night Dive">Night Dive</option>
             <option value="Reef Crest">Reef Crest</option>
@@ -42,21 +42,21 @@ const SettingsForm = () => {
           </select>
         </div>
         <div>
-          <label htmlFor="userVisible">Buddies can add me to their dives</label>
-          <input id="userVisible" type="checkbox" {...register('userVisible')} />
+          <label htmlFor="settingsUserVisible">Buddies can add me to their dives</label>
+          <input id="settingsUserVisible" type="checkbox" {...register('userVisible')} />
         </div>
         <div>
-          <label htmlFor="divesVisible">Buddies can see my dives</label>
-          <input id="divesVisible" type="checkbox" {...register('divesVisible')} />
+          <label htmlFor="settingsDivesVisible">Buddies can see my dives</label>
+          <input id="settingsDivesVisible" type="checkbox" {...register('divesVisible')} />
         </div>
         <div>
-          <label htmlFor="photosVisible">Photos default shared</label>
-          <input id="photosVisible" type="checkbox" {...register('photosVisible')} />
+          <label htmlFor="settingsPhotosVisible">Photos default shared</label>
+          <input id="settingsPhotosVisible" type="checkbox" {...register('photosVisible')} />
         </div>
         <div>
-          <label>Temperature</label>
+          <label htmlFor="settingsTemp">Temperature</label>
           <label>
-            <input type="radio" value="C" {...register('measureTemp')} />
+            <input id="settingsTemp" type="radio" value="C" {...register('measureTemp')} />
             C
           </label>
           <label>
@@ -65,9 +65,9 @@ const SettingsForm = () => {
           </label>
         </div>
         <div>
-          <label>Dive Weight</label>
+          <label htmlFor="settingsDiveWeight">Dive Weight</label>
           <label>
-            <input type="radio" value="kg" {...register('measureWeight')} />
+            <input id="settingsDiveWeight" type="radio" value="kg" {...register('measureWeight')} />
             kg
           </label>
           <label>
@@ -76,9 +76,9 @@ const SettingsForm = () => {
           </label>
         </div>
         <div>
-          <label>Depth & Vis</label>
+          <label htmlFor="settingsDepthVis">Depth & Vis</label>
           <label>
-            <input type="radio" value="m" {...register('measureDepth')} />
+            <input id="settingsDepthVis" type="radio" value="m" {...register('measureDepth')} />
             m
           </label>
           <label>
@@ -87,9 +87,9 @@ const SettingsForm = () => {
           </label>
         </div>
         <div>
-          <label>Air</label>
+          <label htmlFor="settingsAir">Air</label>
           <label>
-            <input type="radio" value="bar" {...register('measurePressure')} />
+            <input id="settingsAir" type="radio" value="bar" {...register('measurePressure')} />
             bar
           </label>
           <label>
