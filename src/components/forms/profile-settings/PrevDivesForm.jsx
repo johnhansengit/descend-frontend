@@ -43,7 +43,7 @@ const PrevDivesForm = ({ userId }) => {
         previousDives: data[key],
       };
     });
-    
+
     try {
       if (prevDivesData) {
         await Client.put('/api/stats/', formattedData);
@@ -57,7 +57,9 @@ const PrevDivesForm = ({ userId }) => {
 
   return (
     <div>
-      <h2>Previous Dives</h2>
+      <div>
+        <h2>Previous Dives</h2>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Open Water Dives */}
         {diveTypes

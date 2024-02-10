@@ -33,7 +33,7 @@ const ProfileForm = () => {
                 console.error('Error fetching profile data:', error);
             }
         };
-    
+
         fetchProfile();
     }, [setValue]);
 
@@ -72,7 +72,9 @@ const ProfileForm = () => {
 
     return (
         <div>
-            <h2>Profile</h2>
+            <div>
+                <h2>Profile</h2>
+            </div>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label htmlFor="profileFirstName">First Name:</label>
@@ -96,8 +98,8 @@ const ProfileForm = () => {
                         <input id="profileHeightCm" type="number" min="0" step="1" {...register('heightCm')} onChange={handleInputChange} />
                     ) : (
                         <>
-                            <input id="profileHeightFt" type="number" min="0" step="1" placeholder="ft" {...register('heightFt')}  onChange={handleInputChange}/>
-                            <input id="profileHeightIn" type="number" min="0" step="1" placeholder="in" {...register('heightIn')}  onChange={handleInputChange}/>
+                            <input id="profileHeightFt" type="number" min="0" step="1" placeholder="ft" {...register('heightFt')} onChange={handleInputChange} />
+                            <input id="profileHeightIn" type="number" min="0" step="1" placeholder="in" {...register('heightIn')} onChange={handleInputChange} />
                         </>
                     )}
                 </div>
@@ -107,7 +109,7 @@ const ProfileForm = () => {
                         <option value="kg">kg</option>
                         <option value="lbs">lbs</option>
                     </select>
-                    <input id="profileWeight" type="number" min="0" step="1" {...register('weight')}  onChange={handleInputChange}/>
+                    <input id="profileWeight" type="number" min="0" step="1" {...register('weight')} onChange={handleInputChange} />
                 </div>
                 <div>
                     <label htmlFor="profileAgency">Diver Certification Agency:</label>

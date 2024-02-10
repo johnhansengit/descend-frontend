@@ -1,26 +1,35 @@
 import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { useStore } from '../../../services/store';
 import { ChangeUserName, ChangeEmail, ChangePassword, CheckUserName, CheckEmail } from '../../../services/Auth';
 
 const ChangeUserInfoForm = () => {
-  const { handleSubmit, register, control, watch } = useForm();
-  const userName = watch('userName');
+
+  const { user } = useStore();
+
+  const { handleSubmit, register, control, watch, setValue } = useForm();
+  const newUserName = watch('newUserName');
   const [formValues, setFormValues] = useState({
-    userName: '',
-    password: '',
+    newUserName: '',
+    email: '',
     newPassword: '',
-    email: ''
+    confirmNewPassword: '',
+    password: ''
   });
   const [userNameError, setUserNameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordErrors, setPasswordErrors] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [confirmNewPasswordTyped, setConfirmNewPasswordTyped] = useState(false);
 
   const handleChange = (e) => {
     setIsTyping(true);
     let value = e.target.value;
-    if (e.target.name === 'userName' && /\s/.test(value)) {
-      return; // Don't update the userName field if the new value contains spaces
+    if (e.target.name === 'newUserName' && /\s/.test(value)) {
+      return;
+    }
+    if (e.target.name === 'confirmNewPassword') {
+      setConfirmNewPasswordTyped(true);
     }
     setFormValues({ ...formValues, [e.target.name]: value });
   };
@@ -34,18 +43,18 @@ const ChangeUserInfoForm = () => {
   };
 
   useEffect(() => {
-    if (/\s/.test(userName)) {
-      setFormValues(prevState => ({ ...prevState, userName: prevState.userName }));
+    if (/\s/.test(newUserName)) {
+      setFormValues(prevState => ({ ...prevState, newUserName: prevState.newUserName }));
     } else {
-      setFormValues(prevState => ({ ...prevState, userName }));
+      setFormValues(prevState => ({ ...prevState, newUserName }));
     }
-  }, [userName]);
+  }, [newUserName]);
 
   useEffect(() => {
     const debouncedUserNameCheck = debounce(async () => {
-      if (formValues.userName) {
+      if (formValues.newUserName) {
         try {
-          const exists = await CheckUserName(formValues.userName);
+          const exists = await CheckUserName(formValues.newUserName);
           if (exists) {
             setUserNameError('Sorry dude, another diver already snagged that handle.');
           } else {
@@ -60,7 +69,7 @@ const ChangeUserInfoForm = () => {
     if (isTyping) {
       debouncedUserNameCheck();
     }
-  }, [formValues.userName, isTyping]);
+  }, [formValues.newUserName, isTyping]);
 
   useEffect(() => {
     const debouncedEmailCheck = debounce(async () => {
@@ -101,6 +110,9 @@ const ChangeUserInfoForm = () => {
         if (!/[0-9]/.test(formValues.newPassword)) {
           errors.push("Safety first. Try adding at least one number, for password strength.");
         }
+        if (confirmNewPasswordTyped && formValues.newPassword !== formValues.confirmNewPassword) {
+          errors.push("Your new passwords are not buddying up, dude.");
+        }
       }
       setPasswordErrors(errors);
     }, 1000);
@@ -108,23 +120,36 @@ const ChangeUserInfoForm = () => {
     if (isTyping) {
       debouncedPasswordValidation();
     }
-  }, [formValues.newPassword, isTyping]);
+  }, [confirmNewPasswordTyped, formValues.confirmNewPassword, formValues.newPassword, isTyping]);
 
   const onSubmit = async (data) => {
     try {
-      if (data.userName) {
-        await ChangeUserName(data.userName);
+      if (data.newUserName) {
+        await ChangeUserName({ userId: user.id, password: data.password, newUserName: data.newUserName });
       }
       if (data.email) {
-        await ChangeEmail(data.email);
+        await ChangeEmail({ userId: user.id, password: data.password, newEmail: data.email });
       }
       if (data.password && data.newPassword) {
-        await ChangePassword(data.password, data.newPassword);
+        await ChangePassword({ userId: user.id, password: data.password, newPassword: data.newPassword });
       }
     } catch (error) {
       console.error('Error updating user info:', error);
     }
+    setFormValues({
+      newUserName: '',
+      email: '',
+      newPassword: '',
+      confirmNewPassword: '',
+      password: ''
+    });
+    setValue('newUserName', '');
+    setValue('email', '');
+    setValue('newPassword', '');
+    setValue('confirmNewPassword', '');
+    setValue('password', '');
   };
+
 
   return (
     <div>
@@ -133,15 +158,14 @@ const ChangeUserInfoForm = () => {
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <label htmlFor="changeUserName">New Username</label>
+          <label htmlFor="changeNewUserName">New Username</label>
           <Controller
-            name="userName"
+            name="newUserName"
             control={control}
             defaultValue=""
-            rules={{ required: true }}
             render={({ field }) => (
               <input
-                id="changeUserName"
+                id="changeNewUserName"
                 type="text"
                 {...field}
                 onChange={(e) => {
@@ -159,10 +183,38 @@ const ChangeUserInfoForm = () => {
           <input
             id="changeEmail"
             type="email"
-            {...register('email', { required: true })}
+            {...register('email')}
             onChange={handleChange}
           />
           {emailError && <p>{emailError}</p>}
+        </div>
+        <div>
+          <label htmlFor="changeNewPassword">New Password</label>
+          <input
+            id="changeNewPassword"
+            type="password"
+            {...register('newPassword')}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="changeConfirmNewPassword">Confirm New Password</label>
+          <input
+            id="changeConfirmNewPassword"
+            type="password"
+            name="confirmNewPassword"
+            value={formValues.confirmNewPassword}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          {passwordErrors.length > 0 && (
+            <ul>
+              {passwordErrors.map((error, index) => (
+                <li key={index}>{error}</li>
+              ))}
+            </ul>
+          )}
         </div>
         <div>
           <label htmlFor="changeCurrentPassword">Current Password (required to make changes)</label>
@@ -172,22 +224,6 @@ const ChangeUserInfoForm = () => {
             {...register('password', { required: true })}
             onChange={handleChange}
           />
-        </div>
-        <div>
-          <label htmlFor="changeNewPassword">New Password</label>
-          <input
-            id="changeNewPassword"
-            type="password"
-            {...register('newPassword', { required: true })}
-            onChange={handleChange}
-          />
-          {passwordErrors.length > 0 && (
-            <ul>
-              {passwordErrors.map((error, index) => (
-                <li key={index}>{error}</li>
-              ))}
-            </ul>
-          )}
         </div>
         <button type="submit">Update</button>
       </form>

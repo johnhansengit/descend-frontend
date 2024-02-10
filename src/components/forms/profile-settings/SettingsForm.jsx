@@ -27,10 +27,12 @@ const SettingsForm = () => {
       console.error('Error submitting form:', error);
     }
   };
-  
+
   return (
     <div>
-      <h2>Settings</h2>
+      <div>
+        <h2>Settings</h2>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label htmlFor="settingsTheme">Theme</label>

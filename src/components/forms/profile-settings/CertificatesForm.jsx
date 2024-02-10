@@ -69,7 +69,9 @@ const CertificatesForm = () => {
 
   return (
     <div>
-      <h2>Certifications</h2>
+      <div>
+        <h2>Certifications</h2>
+      </div>
       <div>
         {certifications
           .sort((a, b) => {
