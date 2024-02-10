@@ -2,13 +2,13 @@ import { useEffect } from 'react';
 import Client from '../../../services/api';
 import { useForm } from 'react-hook-form';
 
-const SettingsForm = ({ userId }) => {
+const SettingsForm = () => {
   const { register, handleSubmit, setValue } = useForm();
 
   useEffect(() => {
     const fetchSettingsData = async () => {
       try {
-        const response = await Client.get(`/api/settings/${userId}`);
+        const response = await Client.get('/api/settings/');
         for (const key in response.data) {
           setValue(key, response.data[key]);
         }
@@ -18,11 +18,11 @@ const SettingsForm = ({ userId }) => {
     };
 
     fetchSettingsData();
-  }, [userId, setValue]);
+  }, [setValue]);
 
   const onSubmit = async (data) => {
     try {
-      await Client.put(`/api/settings/${userId}`, data);
+      await Client.put('/api/settings/', data);
     } catch (error) {
       console.error('Error submitting form:', error);
     }

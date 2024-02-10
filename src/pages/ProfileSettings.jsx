@@ -1,4 +1,5 @@
 import { Link, Element } from 'react-scroll';
+import { useStore } from '../services/store';
 import ProfilePic from '../components/forms/profile-settings/ProfilePic'
 import DirtyAlert from '../components/forms/DirtyAlert'
 import ProfileForm from '../components/forms/profile-settings/ProfileForm'
@@ -9,6 +10,8 @@ import ChangeUserInfoForm from '../components/forms/profile-settings/ChangeUserI
 
 const ProfileSettings = () => {
 
+    const { user } = useStore();
+
     return (
         <div>
             <div>
@@ -16,7 +19,7 @@ const ProfileSettings = () => {
             </div>
             <div>
                 <ProfilePic />
-                User Name
+                {user.userName}
             </div>
             <div>
                 <DirtyAlert />

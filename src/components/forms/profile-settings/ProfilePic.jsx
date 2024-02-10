@@ -3,7 +3,7 @@
 const ProfilePic = () => {
   return (
     <div>
-      
+      ProfilePic Placeholder
     </div>
   )
 }

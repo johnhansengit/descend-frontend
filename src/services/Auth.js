@@ -27,6 +27,16 @@ export const CheckUserName = async (userName) => {
     return res.data.exists
   } catch (error) {
     console.log("CheckUserName error: "+error)
+    return false
+  }
+}
+
+export const CheckEmail = async (email) => {
+  try {
+    const res = await Client.post('/auth/checkEmail', { email })
+    return res.data.exists
+  } catch (error) {
+    console.log("CheckEmail error: "+error)
     throw error
   }
 }

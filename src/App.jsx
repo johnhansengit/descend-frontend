@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { CheckSession } from './services/Auth'
+import { useStore } from './services/store';
 import Nav from './components/Nav';
 import Landing from './pages/Landing';
 import Hub from './pages/Hub';
@@ -15,7 +16,8 @@ import './App.css';
 
 function App() {
 
-  const [user, setUser] = useState(null)
+  const user = useStore(state => state.user);
+  const setUser = useStore(state => state.setUser);
 
   const checkToken = async () => {
     const user = await CheckSession()
@@ -27,6 +29,7 @@ function App() {
     if (token) {
       checkToken()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleLogOut = () => {
@@ -65,11 +68,3 @@ function App() {
 export default App;
 
 
-// stream
-// feed
-// current
-// hover
-// sorted
-// safetystop
-// surfaceinterval
-// signal orient regulator time elevate descend

@@ -12,6 +12,7 @@ const Register = ({ setAuthForm, setRegisteredUserName }) => {
     email: ''
   });
 
+  const [confirmPasswordTyped, setConfirmPasswordTyped] = useState(false);
   const [passwordErrors, setPasswordErrors] = useState([]);
   const [userNameError, setUserNameError] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -22,6 +23,9 @@ const Register = ({ setAuthForm, setRegisteredUserName }) => {
     let value = e.target.value;
     if (e.target.name === 'userName' && /\s/.test(value)) {
       return; // Don't update the userName field if the new value contains spaces
+    }
+    if (e.target.name === 'confirmPassword') {
+      setConfirmPasswordTyped(true);
     }
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
   };
@@ -94,17 +98,17 @@ const Register = ({ setAuthForm, setRegisteredUserName }) => {
         if (!/[0-9]/.test(formValues.password)) {
           errors.push("Safety first. Try adding at least one number, for password strength.");
         }
-        if (formValues.password !== formValues.confirmPassword) {
-          errors.push("Yo, your passwords are not buddying up, dude.");
+        if (confirmPasswordTyped && formValues.password !== formValues.confirmPassword) {
+          errors.push("Your passwords are not buddying up, dude.");
         }
       }
       setPasswordErrors(errors);
     }, 1000);
-
+  
     if (isTyping) {
       debouncedPasswordValidation();
     }
-  }, [formValues.password, formValues.confirmPassword, isTyping]);
+  }, [formValues.password, formValues.confirmPassword, isTyping, confirmPasswordTyped]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -168,6 +172,7 @@ const Register = ({ setAuthForm, setRegisteredUserName }) => {
             type="email"
             value={formValues.email}
             required
+            autoComplete='on'
           />
         </div>
         <div>
@@ -196,9 +201,15 @@ const Register = ({ setAuthForm, setRegisteredUserName }) => {
           />
         </div>
         <div>
-          {passwordErrors.map((error, index) => <p key={index}>{error}</p>)}
+          {passwordErrors.length > 0 && (
+            <ul>
+              {passwordErrors.map((error, index) => (
+                <li key={index}>{error}</li>
+              ))}
+            </ul>
+          )}
         </div>
-        <button disabled={userNameError || passwordErrors.length > 0}>
+        <button disabled={userNameError || emailError || passwordErrors.length > 0}>
           Register
         </button>
       </form>

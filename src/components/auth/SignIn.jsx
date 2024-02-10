@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { SignInUser } from '../../services/Auth'
+import { SignInUser, CheckUserName } from '../../services/Auth'
 
 const SignIn = ({ setUser, prePopulatedUserName }) => {
   
@@ -20,6 +20,11 @@ const SignIn = ({ setUser, prePopulatedUserName }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            const userNameExists = await CheckUserName(formValues.userName);
+            if (!userNameExists) {
+                setSignInError("Doesn't look like there's a diver by that username in our group, dude. Try registering first.");
+                return;
+            }
             const payload = await SignInUser(formValues);
             setUser(payload);
             navigate('/hub');
