@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-const Nav = () => {
+const Nav = ({ handleLogOut }) => {
 
   return (
     <nav>
@@ -11,6 +11,7 @@ const Nav = () => {
         <li><Link to="/dive-sites">Dive Sites</Link></li>
         <li><Link to="/add-dive-site">Add a Dive Site</Link></li>
         <li><Link to="/profile-settings">Profile & Settings</Link></li>
+        <li><Link onClick={handleLogOut} to="/">Sign Out</Link></li>
       </ul>
     </nav>
   );
