@@ -40,3 +40,33 @@ export const CheckSession = async () => {
     throw error
   }
 }
+
+export const ChangeUserName = async (data) => {
+  try {
+    const res = await Client.post('/auth/changeUserName', data)
+    return res.data
+  } catch (error) {
+    console.log("ChangeUserName error: "+error)
+    throw error
+  }
+}
+
+export const ChangeEmail = async (data) => {
+  try {
+    const res = await Client.post('/auth/changeEmail', data)
+    return res.data
+  } catch (error) {
+    console.log("ChangeEmail error: "+error)
+    throw error
+  }
+}
+
+export const ChangePassword = async (data) => {
+  try {
+    const res = await Client.post('/auth/changePassword', data)
+    return res.data
+  } catch (error) {
+    console.log("ChangePassword error: "+error)
+    throw error
+  }
+}

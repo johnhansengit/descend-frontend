@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { RegisterUser } from '../../services/Auth';
-import { CheckUserName } from '../../services/Auth';
+import { RegisterUser, CheckUserName, CheckEmail } from '../../services/Auth';
 
 const Register = ({ setAuthForm, setRegisteredUserName }) => {
   let navigate = useNavigate();
@@ -9,11 +8,13 @@ const Register = ({ setAuthForm, setRegisteredUserName }) => {
   const [formValues, setFormValues] = useState({
     userName: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    email: ''
   });
 
   const [passwordErrors, setPasswordErrors] = useState([]);
   const [userNameError, setUserNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
   const handleChange = (e) => {
@@ -39,7 +40,7 @@ const Register = ({ setAuthForm, setRegisteredUserName }) => {
         try {
           const exists = await CheckUserName(formValues.userName);
           if (exists) {
-            setUserNameError('Username already exists');
+            setUserNameError('Sorry dude, another diver already snagged that handle.');
           } else {
             setUserNameError('');
           }
@@ -55,23 +56,46 @@ const Register = ({ setAuthForm, setRegisteredUserName }) => {
   }, [formValues.userName, isTyping]);
 
   useEffect(() => {
+    const debouncedEmailCheck = debounce(async () => {
+      if (formValues.email) {
+        try {
+          const exists = await CheckEmail(formValues.email);
+          if (exists) {
+            setEmailError('Weird, that email is already in use. Maybe you already have an account? Try logging in.');
+          } else if (!/\S+@\S+\.\S+/.test(formValues.email)) {
+            setEmailError('Invalid email format');
+          } else {
+            setEmailError('');
+          }
+        } catch (error) {
+          console.error('Error checking email:', error);
+        }
+      }
+    }, 1000);
+
+    if (isTyping) {
+      debouncedEmailCheck();
+    }
+  }, [formValues.email, isTyping]);
+
+  useEffect(() => {
     const debouncedPasswordValidation = debounce(() => {
       let errors = [];
       if (formValues.password) {
         if (formValues.password.length < 8) {
-          errors.push("Password must be at least 8 characters long.");
+          errors.push("Password's gotta have as many characters as an octopus has legs, dude.");
         }
         if (!/[A-Z]/.test(formValues.password)) {
-          errors.push("Password must contain at least one uppercase letter.");
+          errors.push("Okay let's add at leaset one uppercase letter in there, buddy.");
         }
         if (!/[a-z]/.test(formValues.password)) {
-          errors.push("Password must contain at least one lowercase letter.");
+          errors.push("No need for shouting, dude. Lowercase letters are your friend.");
         }
         if (!/[0-9]/.test(formValues.password)) {
-          errors.push("Password must contain at least one number.");
+          errors.push("Safety first. Try adding at least one number, for password strength.");
         }
         if (formValues.password !== formValues.confirmPassword) {
-          errors.push("Passwords must match.");
+          errors.push("Yo, your passwords are not buddying up, dude.");
         }
       }
       setPasswordErrors(errors);
@@ -84,13 +108,14 @@ const Register = ({ setAuthForm, setRegisteredUserName }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (userNameError || passwordErrors.length > 0) {
+    if (userNameError || passwordErrors.length > 0 || emailError) {
       return;
     }
     try {
       const registeredUser = await RegisterUser({
         userName: formValues.userName,
-        password: formValues.password
+        password: formValues.password,
+        email: formValues.email
       });
       if (registeredUser) {
         setRegisteredUserName(formValues.userName);
@@ -100,6 +125,8 @@ const Register = ({ setAuthForm, setRegisteredUserName }) => {
     } catch (error) {
       const errorMessage = error.response?.data?.msg || "An unexpected error occurred";
       if (errorMessage.includes("email")) {
+        setEmailError(errorMessage);
+      } else if (errorMessage.includes("username")) {
         setUserNameError(errorMessage);
       } else {
         setPasswordErrors([errorMessage]);
@@ -108,7 +135,8 @@ const Register = ({ setAuthForm, setRegisteredUserName }) => {
     setFormValues({
       userName: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      email: ''
     });
     setIsTyping(false);
   };
@@ -130,6 +158,20 @@ const Register = ({ setAuthForm, setRegisteredUserName }) => {
         </div>
         <div>
           {userNameError && <p>{userNameError}</p>}
+        </div>
+        <div>
+          <label htmlFor="registerEmail">Email</label>
+          <input
+            onChange={handleChange}
+            id="registerEmail"
+            name="email"
+            type="email"
+            value={formValues.email}
+            required
+          />
+        </div>
+        <div>
+          {emailError && <p>{emailError}</p>}
         </div>
         <div>
           <label htmlFor="registerPassword">Password</label>

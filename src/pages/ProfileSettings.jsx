@@ -27,7 +27,7 @@ const ProfileSettings = () => {
                 <Link to="certifications" smooth={true}>Certifications</Link>
                 <Link to="previousDives" smooth={true}>Previous Dives</Link>
                 <Link to="settings" smooth={true}>Settings</Link>
-                <Link to="updateUserInfo" smooth={true}>Update Username, Email or Password</Link>
+                <Link to="updateUserInfo" smooth={true}>Update Username, Email, or Password</Link>
             </div>
             <div>
                 <div>

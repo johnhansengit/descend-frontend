@@ -1,27 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import Client from '../../../services/api';
 import { useForm } from 'react-hook-form';
 
 const SettingsForm = ({ userId }) => {
-  const { register, handleSubmit, setValue } = useForm({
-    defaultValues: {
-      theme: 'Blue Hole',
-      userVisible: true,
-      divesVisible: true,
-      photosVisible: true,
-      measureTemp: 'C',
-      measureWeight: 'kg',
-      measureDepth: 'm',
-      measurePressure: 'bar',
-    },
-  });
-  const [settingsData, setSettingsData] = useState(null);
+  const { register, handleSubmit, setValue } = useForm();
 
   useEffect(() => {
     const fetchSettingsData = async () => {
       try {
-        const response = await Client.get('/api/settings/');
-        setSettingsData(response.data);
+        const response = await Client.get(`/api/settings/${userId}`);
         for (const key in response.data) {
           setValue(key, response.data[key]);
         }
@@ -35,16 +22,12 @@ const SettingsForm = ({ userId }) => {
 
   const onSubmit = async (data) => {
     try {
-      if (settingsData) {
-        await Client.put('/api/settings/', data);
-      } else {
-        await Client.post('/api/settings/', data);
-      }
+      await Client.put(`/api/settings/${userId}`, data);
     } catch (error) {
       console.error('Error submitting form:', error);
     }
   };
-
+  
   return (
     <div>
       <h2>Settings</h2>
@@ -114,7 +97,7 @@ const SettingsForm = ({ userId }) => {
             psi
           </label>
         </div>
-        <button type="submit">{settingsData ? 'Update' : 'Submit'}</button>
+        <button type="submit">Update</button>
       </form>
     </div>
   );

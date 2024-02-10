@@ -77,22 +77,8 @@ const PrevDivesForm = ({ userId }) => {
               />
             </div>
           ))}
-        {/* Discover Dives */}
         {diveTypes
-          .filter((diveType) => diveType.id === 24)
-          .map((diveType) => (
-            <div key={diveType.id}>
-              <label htmlFor={`diveType-${diveType.id}`}>{diveType.diveType}</label>
-              <input
-                id={`diveType-${diveType.id}`}
-                type="number"
-                min="0"
-                {...register(`diveType${diveType.id}`, { valueAsNumber: true })}
-              />
-            </div>
-          ))}
-        {diveTypes
-          .filter((diveType) => diveType.id !== 1 && diveType.id !== 7 && diveType.id !== 24)
+          .filter((diveType) => diveType.id !== 1 && diveType.id !== 7)
           .sort((a, b) => a.diveType.localeCompare(b.diveType))
           .map((diveType) => (
             <div key={diveType.id}>
