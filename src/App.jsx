@@ -22,7 +22,7 @@ function App() {
 
   const checkToken = async () => {
     const user = await CheckSession()
-    setUser(user)  
+    setUser(user)
   }
 
   useEffect(() => {
@@ -30,7 +30,7 @@ function App() {
     if (token) {
       checkToken()
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleLogOut = () => {
@@ -38,26 +38,26 @@ function App() {
     localStorage.clear()
   }
 
-  
+
   return (
     <>
-      {user ? 
+      {user ?
         <header>
-          <Nav user={user} handleLogOut={handleLogOut}/>
+          <Nav user={user} handleLogOut={handleLogOut} />
         </header>
         :
         null
       }
       <main>
         <Routes>
-        <Route path="/" element={<Landing user={user} setUser={setUser}/>} />
+          <Route path="/" element={<Landing user={user} setUser={setUser} />} />
           <Route path="/hub" element={<ProtectedRoute user={user}><Hub /></ProtectedRoute>} />
           <Route path="/profile-settings" element={<ProtectedRoute user={user}><ProfileSettings /></ProtectedRoute>} />
           <Route path="/dives" element={<ProtectedRoute user={user}><Dives /></ProtectedRoute>} />
           <Route path="/log-dive" element={<ProtectedRoute user={user}><LogDive /></ProtectedRoute>} />
-          <Route path="/dive-sites" element={<ProtectedRoute user={user}><DiveSites /></ProtectedRoute>} />
           <Route path="/dive-sites/add" element={<ProtectedRoute user={user}><AddDiveSite /></ProtectedRoute>} />
-          <Route path="/dive-sites/{country}/{name}" element={<ProtectedRoute user={user}><DiveSiteDetail /></ProtectedRoute>} />
+          <Route path="/dive-sites/:country/:name" element={<DiveSiteDetail />} />
+          <Route path="/dive-sites" element={<ProtectedRoute user={user}><DiveSites /></ProtectedRoute>} />
         </Routes>
       </main>
       <footer>

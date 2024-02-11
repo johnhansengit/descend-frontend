@@ -10,12 +10,11 @@ const DiveSiteDetail = () => {
 
     useEffect(() => {
         const fetchDiveSite = async () => {
+            console.log('country:', country, 'name:', name)
             try {
-                const response = await Client.get(`/api/divesites/${country}/${name}`);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const diveSiteData = await response.json();
+                const response = await Client.get(`/api/divesites/${encodeURIComponent(country)}/${encodeURIComponent(name)}`);
+                const diveSiteData = response.data;
+                console.log('diveSiteData:', diveSiteData);
                 setDiveSite(diveSiteData);
             } catch (error) {
                 console.error('Error:', error);
@@ -25,10 +24,7 @@ const DiveSiteDetail = () => {
         const fetchUserSettings = async () => {
             try {
                 const response = await Client.get('/api/settings');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const settingsData = await response.json();
+                const settingsData = response.data;
                 setUserSettings(settingsData);
             } catch (error) {
                 console.error('Error:', error);
