@@ -1,14 +1,17 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { m2ft, C2F } from '../helpers/conversionUtils';
+import Client from '../services/api';
 
 const DiveSiteDetail = () => {
     const { id } = useParams();
     const [diveSite, setDiveSite] = useState(null);
+    const [userSettings, setUserSettings] = useState(null);
 
     useEffect(() => {
         const fetchDiveSite = async () => {
             try {
-                const response = await fetch(`/api/divesites/${id}`);
+                const response = await Client.get(`/api/divesites/${id}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -19,24 +22,49 @@ const DiveSiteDetail = () => {
             }
         };
 
+        const fetchUserSettings = async () => {
+            try {
+                const response = await Client.get('/api/settings');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const settingsData = await response.json();
+                setUserSettings(settingsData);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
         fetchDiveSite();
+        fetchUserSettings();
     }, [id]);
 
     if (!diveSite) {
         return <div>Loading...</div>;
     }
 
+    const distanceUnit = userSettings.measureDepth === 'ft' ? 'ft' : 'm';
+    const tempUnit = userSettings.measureTemp === 'F' ? 'F' : 'C';
+    const minDepth = userSettings.measureDepth === 'ft' ? m2ft(diveSite.minDepth) : diveSite.minDepth;
+    const maxDepth = userSettings.measureDepth === 'ft' ? m2ft(diveSite.maxDepth) : diveSite.maxDepth;
+    const avgVis = userSettings.measureDepth === 'ft' ? m2ft(diveSite.avgVis) : diveSite.avgVis;
+    const avgTemp = userSettings.measureTemp === 'F' ? C2F(diveSite.avgTemp) : diveSite.avgTemp;
+
     return (
         <div>
             <h1>{diveSite.name}</h1>
             <p>Country: {diveSite.country}</p>
             {/* GoogleMaps using coords diveSite.coordLat and diveSite.coordLong, if they are not null*/}
-            <p>Minimum Depth: {diveSite.minDepth}</p>
-            <p>Maximum Depth: {diveSite.maxDepth}</p>
-            {diveSite.avgTemp !== null && <p>Average Temperature: {diveSite.avgTemp}</p>}
-            {diveSite.avgVis !== null && <p>Average Visibility: {diveSite.avgVis}</p>}
-            <p>Description: {diveSite.description}</p>
+            <p>Minimum Depth: {minDepth} {distanceUnit}</p>
+            <p>Maximum Depth: {maxDepth} {distanceUnit}</p>
             <p>Salinity: {diveSite.salinity}</p>
+            <p>Description: {diveSite.description}</p>
+
+            <h2>Conditions</h2>
+            <p>{diveSite.current}</p>
+            {avgTemp !== null && <p>Average Temperature: {avgTemp} {tempUnit}</p>}
+            {avgVis !== null && <p>Average Visibility: {avgVis} {distanceUnit}</p>}
+
             <h2>Comment Ratings</h2>
             {diveSite.commentRatings.map((commentRating) => (
                 <div key={commentRating.id}>

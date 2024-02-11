@@ -1,11 +1,20 @@
 import { useForm } from 'react-hook-form';
+import { ft2m } from './helpers/conversionUnits';
+import Client from './services/api';
 
 const DiveSiteForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = async (data) => {
     try {
-      const response = await fetch('/api/divesites/new', {
+      if (data.depthUnit === 'ft') {
+        data.minDepth = ft2m(data.minDepth);
+        data.maxDepth = ft2m(data.maxDepth);
+      }
+
+      delete data.depthUnit;
+
+      const response = await Client.get('/api/divesites/new', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,6 +60,28 @@ const DiveSiteForm = () => {
             Maximum Depth of Interest
             <input type="number" {...register('maxDepth', { required: true })} />
             {errors.maxDepth && <p>This field is required</p>}
+          </label>
+
+          <label>
+            Depth Unit
+            <select {...register('depthUnit', { required: true })}>
+              <option value="">Select unit</option>
+              <option value="m">m</option>
+              <option value="ft">ft</option>
+            </select>
+            {errors.depthUnit && <p>This field is required</p>}
+          </label>
+
+          <label>
+            Current
+            <select {...register('current', { required: true })}>
+              <option value="">Select current strength</option>
+              <option value="none">None</option>
+              <option value="mild">Mild</option>
+              <option value="moderate">Moderate</option>
+              <option value="strong">Strong</option>
+            </select>
+            {errors.current && <p>This field is required</p>}
           </label>
 
           <label>
