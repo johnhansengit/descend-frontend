@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useStore } from '../../services/store';  
 import { ft2m } from '../../helpers/conversionUtils';
 import Client from '../../services/api';
+import { getNames } from 'country-list';
 
 const DiveSiteForm = () => {
 
@@ -13,9 +14,15 @@ const DiveSiteForm = () => {
 
   const { register, handleSubmit, formState: { errors }, watch, reset } = useForm();
   const [isDiveSiteDuplicate, setIsDiveSiteDuplicate] = useState(false);
-
+  
   const country = watch('country');
   const name = watch('name');
+  
+  const [countries, setCountries] = useState([]);
+
+  useEffect(() => {
+    setCountries(getNames());
+  }, []);
 
   useEffect(() => {
     const checkDiveSiteDuplicate = async () => {
@@ -67,7 +74,14 @@ return (
 
       <div>
         <label htmlFor="divesiteCountry">Country</label>
-        <input id="divesiteCountry" {...register('country', { required: true })} />
+        <select id="divesiteCountry" {...register('country', { required: true })}>
+          <option value="">Select a country</option>
+          {countries.map((country, index) => (
+            <option key={index} value={country}>
+              {country}
+            </option>
+          ))}
+        </select>
         {errors.country && <p>This field is required</p>}
       </div>
 
