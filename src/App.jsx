@@ -10,6 +10,7 @@ import Dives from './pages/Dives';
 import LogDive from './pages/LogDive';
 import DiveSites from './pages/DiveSites';
 import AddDiveSite from './pages/AddDiveSite';
+import DiveSiteDetail from './pages/DiveSiteDetail';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import './App.css';
@@ -55,7 +56,8 @@ function App() {
           <Route path="/dives" element={<ProtectedRoute user={user}><Dives /></ProtectedRoute>} />
           <Route path="/log-dive" element={<ProtectedRoute user={user}><LogDive /></ProtectedRoute>} />
           <Route path="/dive-sites" element={<ProtectedRoute user={user}><DiveSites /></ProtectedRoute>} />
-          <Route path="/add-dive-site" element={<ProtectedRoute user={user}><AddDiveSite /></ProtectedRoute>} />
+          <Route path="/dive-sites/add" element={<ProtectedRoute user={user}><AddDiveSite /></ProtectedRoute>} />
+          <Route path="/dive-sites/{country}/{name}" element={<ProtectedRoute user={user}><DiveSiteDetail /></ProtectedRoute>} />
         </Routes>
       </main>
       <footer>

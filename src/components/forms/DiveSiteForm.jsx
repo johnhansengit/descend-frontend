@@ -1,10 +1,28 @@
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ft2m } from './helpers/conversionUnits';
 import Client from './services/api';
 
 const DiveSiteForm = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, watch } = useForm();
+  const [isDiveSiteDuplicate, setIsDiveSiteDuplicate] = useState(false);
 
+  const country = watch('country');
+  const name = watch('name');
+
+  useEffect(() => {
+    const checkDiveSiteDuplicate = async () => {
+      if (country && name) {
+        const response = await Client.get(`/api/divesites/check?country=${country}&name=${name}`);
+        if (response.ok) {
+          const isDuplicate = await response.json();
+          setIsDiveSiteDuplicate(isDuplicate);
+        }
+      }
+    };
+
+    checkDiveSiteDuplicate();
+  }, [country, name]);
   const onSubmit = async (data) => {
     try {
       if (data.depthUnit === 'ft') {
@@ -107,7 +125,8 @@ const DiveSiteForm = () => {
             {errors.salinity && <p>This field is required</p>}
           </fieldset>
 
-          <button type="submit">Submit</button>
+          <button type="submit" disabled={isDiveSiteDuplicate}>Submit</button>
+          {isDiveSiteDuplicate && <p>A dive site with that name already exists in {country}.</p>}
         </form>
       </div>
     </div>

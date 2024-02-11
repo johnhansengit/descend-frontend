@@ -4,14 +4,14 @@ import { m2ft, C2F } from '../helpers/conversionUtils';
 import Client from '../services/api';
 
 const DiveSiteDetail = () => {
-    const { id } = useParams();
+    const { country, name } = useParams();
     const [diveSite, setDiveSite] = useState(null);
     const [userSettings, setUserSettings] = useState(null);
 
     useEffect(() => {
         const fetchDiveSite = async () => {
             try {
-                const response = await Client.get(`/api/divesites/${id}`);
+                const response = await Client.get(`/api/divesites/${country}/${name}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -37,7 +37,7 @@ const DiveSiteDetail = () => {
 
         fetchDiveSite();
         fetchUserSettings();
-    }, [id]);
+    }, [country, name]);
 
     if (!diveSite) {
         return <div>Loading...</div>;
