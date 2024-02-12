@@ -29,7 +29,7 @@ export const themes = {
       greyed: '#535353',
     },
   }),
-  'reefcrest': createTheme({
+  'reef-crest': createTheme({
     typography: {
       fontFamily: 'Lato, Arial, sans-serif',
     },

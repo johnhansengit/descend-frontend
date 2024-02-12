@@ -13,6 +13,7 @@ import AddDiveSite from './pages/AddDiveSite';
 import DiveSiteDetail from './pages/DiveSiteDetail';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import CssBaseline from '@mui/material/CssBaseline';
 import './App.css';
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
 
   return (
     <>
+      <CssBaseline />
       {user ?
         <header>
           <Nav user={user} handleLogOut={handleLogOut} />

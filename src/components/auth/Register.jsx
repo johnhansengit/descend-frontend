@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RegisterUser, CheckUserName, CheckEmail } from '../../services/Auth';
+import { Button, TextField, Box, Typography, Alert } from '@mui/material';
 
 const Register = ({ setAuthForm, setRegisteredUserName }) => {
   let navigate = useNavigate();
@@ -20,16 +21,25 @@ const Register = ({ setAuthForm, setRegisteredUserName }) => {
 
   const handleChange = (e) => {
     setIsTyping(true);
-    let value = e.target.value;
-    if (e.target.name === 'userName' && /\s/.test(value)) {
-      return; // Don't update the userName field if the new value contains spaces
+    let { name, value } = e.target;
+  
+    if (name === 'userName') {
+      setUserNameError('');
+      if (/\s/.test(value)) {
+        return; 
+      }
+    } else if (name === 'email') {
+      setEmailError('');
+    } else if (name === 'password' || name === 'confirmPassword') {
+      setPasswordErrors([]);
+      if (name === 'confirmPassword') {
+        setConfirmPasswordTyped(true);
+      }
     }
-    if (e.target.name === 'confirmPassword') {
-      setConfirmPasswordTyped(true);
-    }
-    setFormValues({ ...formValues, [e.target.name]: e.target.value });
+  
+    setFormValues({ ...formValues, [name]: value });
   };
-
+  
   const debounce = (fn, delay) => {
     let timeoutId;
     return (...args) => {
@@ -52,7 +62,7 @@ const Register = ({ setAuthForm, setRegisteredUserName }) => {
           console.error('Error checking username:', error);
         }
       }
-    }, 1000);
+    }, 2000);
 
     if (isTyping) {
       debouncedUserNameCheck();
@@ -75,7 +85,7 @@ const Register = ({ setAuthForm, setRegisteredUserName }) => {
           console.error('Error checking email:', error);
         }
       }
-    }, 1000);
+    }, 2000);
 
     if (isTyping) {
       debouncedEmailCheck();
@@ -103,8 +113,8 @@ const Register = ({ setAuthForm, setRegisteredUserName }) => {
         }
       }
       setPasswordErrors(errors);
-    }, 1000);
-  
+    }, 2000);
+
     if (isTyping) {
       debouncedPasswordValidation();
     }
@@ -147,73 +157,136 @@ const Register = ({ setAuthForm, setRegisteredUserName }) => {
 
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="registerUserName">User Name</label>
-          <input
-            onChange={handleChange}
-            id="registerUserName"
-            name="userName"
-            type="string"
-            value={formValues.userName}
-            required
-          />
-        </div>
-        <div>
-          {userNameError && <p>{userNameError}</p>}
-        </div>
-        <div>
-          <label htmlFor="registerEmail">Email</label>
-          <input
-            onChange={handleChange}
-            id="registerEmail"
-            name="email"
-            type="email"
-            value={formValues.email}
-            required
-            autoComplete='on'
-          />
-        </div>
-        <div>
-          {emailError && <p>{emailError}</p>}
-        </div>
-        <div>
-          <label htmlFor="registerPassword">Password</label>
-          <input
-            onChange={handleChange}
-            id="registerPassword"
-            type="password"
-            name="password"
-            value={formValues.password}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="registerConfirmPassword">Confirm Password</label>
-          <input
-            onChange={handleChange}
-            id="registerConfirmPassword"
-            type="password"
-            name="confirmPassword"
-            value={formValues.confirmPassword}
-            required
-          />
-        </div>
-        <div>
-          {passwordErrors.length > 0 && (
-            <ul>
-              {passwordErrors.map((error, index) => (
-                <li key={index}>{error}</li>
-              ))}
-            </ul>
-          )}
-        </div>
-        <button disabled={userNameError || emailError || passwordErrors.length > 0}>
-          Register
-        </button>
-      </form>
-    </div>
+    <Box
+      component="form"
+      minWidth="max(30vw, 300px)"
+      onSubmit={handleSubmit}
+      sx={{
+        mt: 1,
+        mb: 1,
+        padding: 3,
+        borderRadius: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: (theme) => theme.palette.foreground,
+        color: (theme) => theme.palette.text.primary,
+        fontFamily: (theme) => theme.typography.fontFamily,
+      }}
+    >
+      <Typography component="h1" variant="h5" sx={{ textAlign: 'center' }}>
+        Register
+      </Typography>
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        id="registerUserName"
+        label="User Name"
+        name="userName"
+        autoComplete="username"
+        autoFocus
+        value={formValues.userName}
+        onChange={handleChange}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '&.Mui-focused fieldset': {
+              borderColor: (theme) => theme.palette.warning.main,
+            },
+            '&:hover fieldset': {
+              borderColor: (theme) => theme.palette.warning.main,
+            },
+          },
+        }}
+      />
+      <Box width="100%">
+        {userNameError && <Alert severity="error">{userNameError}</Alert>}
+      </Box>
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        id="registerEmail"
+        label="Email"
+        name="email"
+        autoComplete="email"
+        value={formValues.email}
+        onChange={handleChange}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '&.Mui-focused fieldset': {
+              borderColor: (theme) => theme.palette.warning.main,
+            },
+            '&:hover fieldset': {
+              borderColor: (theme) => theme.palette.warning.main,
+            },
+          },
+        }}
+      />
+      <Box width="100%">
+        {emailError && <Alert severity="error">{emailError}</Alert>}
+      </Box>
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        name="password"
+        label="Password"
+        type="password"
+        id="registerPassword"
+        value={formValues.password}
+        onChange={handleChange}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '&.Mui-focused fieldset': {
+              borderColor: (theme) => theme.palette.warning.main,
+            },
+            '&:hover fieldset': {
+              borderColor: (theme) => theme.palette.warning.main,
+            },
+          },
+        }}
+      />
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        name="confirmPassword"
+        label="Confirm Password"
+        type="password"
+        id="registerConfirmPassword"
+        value={formValues.confirmPassword}
+        onChange={handleChange}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '&.Mui-focused fieldset': {
+              borderColor: (theme) => theme.palette.warning.main,
+            },
+            '&:hover fieldset': {
+              borderColor: (theme) => theme.palette.warning.main,
+            },
+          },
+        }}
+      />
+      {passwordErrors.length > 0 && passwordErrors.map((error, index) => (
+        <Box width="100%" key={index}>
+          <Alert severity="error" >{error}</Alert>
+        </Box>
+      ))}
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        sx={{
+          mt: 3,
+          mb: 2,
+          backgroundColor: (theme) => theme.palette.warning.main,
+        }}
+        disabled={!formValues.userName || !formValues.email || !formValues.password || !formValues.confirmPassword || userNameError || emailError || passwordErrors.length > 0}
+        >
+        Register
+      </Button>
+    </Box>
   );
 };
 

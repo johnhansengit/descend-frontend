@@ -1,4 +1,7 @@
-#root {
-  box-sizing: border-box;
-  margin: 0 auto;
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  cursor: pointer;
 }

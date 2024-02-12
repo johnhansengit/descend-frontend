@@ -1,48 +1,75 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import SignIn from '../components/auth/SignIn'
-import Register from '../components/auth/Register'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button, Link, Typography, Box, ThemeProvider } from '@mui/material';
+import { themes } from '../../themes';
+import SignIn from '../components/auth/SignIn';
+import Register from '../components/auth/Register';
 
 const Landing = ({ user, setUser }) => {
+    let navigate = useNavigate();
+    const [authForm, setAuthForm] = useState('signin');
+    const [registeredUserName, setRegisteredUserName] = useState('');
 
-  let navigate = useNavigate()
+    return (
+        <ThemeProvider theme={themes['blue-hole']}>
+            <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
+                alignItems="center"
+                minHeight="100vh"
+                sx={{
+                    backgroundColor: (theme) => theme.palette.primary.main,
+                    color: (theme) => theme.palette.text.primary,
+                    fontFamily: (theme) => theme.typography.fontFamily,
+                }}
+            >
+                <Typography
+                    component="h1"
+                    variant="h1"
+                    sx={{
+                        fontSize: 'clamp(65px, 9vw, 9vw)',
+                        fontWeight: 900,
+                        color: (theme) => theme.palette.secondary.main,
+                    }}
+                >
+                    DESCEND
+                </Typography>
 
-  const [authForm, setAuthForm] = useState('signin')
-  const [registeredUserName, setRegisteredUserName] = useState('');
-
-  return (
-    <div>
-        <div>
-            <h1>DESCEND</h1>
-        </div>
-        {user ? 
-            <div>
-                <button onClick={() => navigate('/hub')}>
-                    Head to the Hub
-                </button>
-            </div> 
-            : 
-            <div>
-                {authForm === 'signin' ?
-                    <div>
-                        <div>
+                {user ? (
+                    <Button onClick={() => navigate('/hub')} color="primary">
+                        Dive In
+                    </Button>
+                ) : (
+                    authForm === 'signin' ? (
+                        <>
                             <SignIn setUser={setUser} prePopulatedUserName={registeredUserName} />
-                        </div>
-                        <div>
-                            <button onClick={() => setAuthForm('register')}>
-                                Click Here To Register
-                            </button>
-                        </div>
-                    </div>
-                    :
-                    <div>
-                        <Register setAuthForm={setAuthForm} setRegisteredUserName={setRegisteredUserName} />
-                    </div>
-                }
-            </div>
-        }
-    </div>
-  )
-}
+                            <Box textAlign="center">
+                                <Link
+                                    sx={{ textDecoration: 'none' }}
+                                    onClick={() => setAuthForm('register')} variant="body2" color="secondary"
+                                >
+                                    {"Don't have an account? Sign Up"}
+                                </Link>
+                            </Box>
+                        </>
+                    ) : (
+                        <>
+                            <Register setAuthForm={setAuthForm} setRegisteredUserName={setRegisteredUserName} />
+                            <Box textAlign="center">
+                                <Link
+                                    sx={{ textDecoration: 'none' }}
+                                    onClick={() => setAuthForm('signin')} variant="body2" color="secondary"
+                                >
+                                    {"Back to Sign In"}
+                                </Link>
+                            </Box>
+                        </>
+                    )
+                )}
+            </Box>
+        </ThemeProvider>
+    );
+};
 
-export default Landing
+export default Landing;
