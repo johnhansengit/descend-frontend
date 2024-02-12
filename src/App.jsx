@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { useThemeStore } from '../src/services/store';
-import { CheckSession } from './services/Auth'
-import { useStore } from './services/store';
+import { useThemeStore, useStore } from './services/store'; // Adjusted import path
+import { CheckSession } from './services/Auth';
 import Nav from './components/Nav';
 import Landing from './pages/Landing';
 import Hub from './pages/Hub';
@@ -14,45 +13,44 @@ import AddDiveSite from './pages/AddDiveSite';
 import DiveSiteDetail from './pages/DiveSiteDetail';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/auth/ProtectedRoute';
-import { ThemeProvider } from '@mui/material/styles'; 
+import { ThemeProvider, Box } from '@mui/material'; // Added Box import
 import CssBaseline from '@mui/material/CssBaseline';
 import './App.css';
 
 const App = () => {
-
   const user = useStore(state => state.user);
   const setUser = useStore(state => state.setUser);
   const theme = useThemeStore(state => state.theme);
 
   const checkToken = async () => {
-    const user = await CheckSession()
-    setUser(user)
-  }
+    const user = await CheckSession();
+    setUser(user);
+  };
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token');
     if (token) {
-      checkToken()
+      checkToken();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   const handleLogOut = () => {
-    setUser(null)
-    localStorage.clear()
-  }
-
+    setUser(null);
+    localStorage.clear();
+  };
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {user ?
-        <header>
-          <Nav user={user} handleLogOut={handleLogOut} />
-        </header>
-        :
-        null
-      }
+      <Box sx={{
+        position: 'fixed',
+        top: 10,
+        right: 0,
+        zIndex: 1201
+      }}>
+        {user && <Nav user={user} handleLogOut={handleLogOut} />}
+      </Box>
       <main>
         <Routes>
           <Route path="/" element={<Landing user={user} setUser={setUser} />} />
@@ -70,8 +68,6 @@ const App = () => {
       </footer>
     </ThemeProvider>
   );
-}
+};
 
 export default App;
-
-

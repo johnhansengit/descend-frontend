@@ -1,18 +1,70 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Drawer, IconButton, List, ListItem, ListItemText, Box } from '@mui/material';
+import ExploreIcon from '@mui/icons-material/Explore';
 
 const Nav = ({ handleLogOut }) => {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const toggleDrawer = (open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    setIsDrawerOpen(open);
+  };
 
   return (
     <nav>
-      <ul>
-        <li><Link to="/hub">Hub</Link></li>
-        <li><Link to="/dives">My Dives</Link></li>
-        <li><Link to="/log-dive">Log a Dive</Link></li>
-        <li><Link to="/dive-sites">Dive Sites</Link></li>
-        <li><Link to="/dive-sites/add">Add a Dive Site</Link></li>
-        <li><Link to="/profile-settings">Profile & Settings</Link></li>
-        <li><Link onClick={handleLogOut} to="/">Sign Out</Link></li>
-      </ul>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mr: 2 }}>
+        <IconButton
+          color="inherit"
+          aria-label="menu"
+          onClick={toggleDrawer(true)}
+        >
+          <ExploreIcon 
+            sx={{
+              fontSize: 40,
+              color: (theme) => theme.palette.secondary.main,
+            }}
+          />
+        </IconButton>
+      </Box>
+      <Drawer
+        anchor="right"
+        open={isDrawerOpen}
+        onClose={toggleDrawer(false)}
+        sx={{
+          '& .MuiDrawer-paper': {
+            backgroundColor: (theme) => theme.palette.secondary.main,
+            color: (theme) => theme.palette.primary.main,
+            fontFamily: (theme) => theme.typography.fontFamily,
+          },
+        }}
+      >
+        <List>
+          <ListItem button component={Link} to="/hub" onClick={toggleDrawer(false)}>
+            <ListItemText primary="Hub" />
+          </ListItem>
+          <ListItem button component={Link} to="/dives" onClick={toggleDrawer(false)}>
+            <ListItemText primary="My Dives" />
+          </ListItem>
+          <ListItem button component={Link} to="/log-dive" onClick={toggleDrawer(false)}>
+            <ListItemText primary="Log a Dive" />
+          </ListItem>
+          <ListItem button component={Link} to="/dive-sites" onClick={toggleDrawer(false)}>
+            <ListItemText primary="Dive Sites" />
+          </ListItem>
+          <ListItem button component={Link} to="/dive-sites/add" onClick={toggleDrawer(false)}>
+            <ListItemText primary="Add a Dive Site" />
+          </ListItem>
+          <ListItem button component={Link} to="/profile-settings" onClick={toggleDrawer(false)}>
+            <ListItemText primary="Profile & Settings" />
+          </ListItem>
+          <ListItem button component={Link} to="/" onClick={() => { handleLogOut(); toggleDrawer(false)(); }}>
+            <ListItemText primary="Sign Out" />
+          </ListItem>
+        </List>
+      </Drawer>
     </nav>
   );
 };
