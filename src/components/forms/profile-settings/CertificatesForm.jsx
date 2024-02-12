@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import Client from '../../../services/api';
 import { useForm, Controller } from 'react-hook-form';
 import { useStore } from '../../../services/store';
-import { Typography, Box, Grid, TextField, Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { Typography, Box, Grid, TextField, Button, Select, MenuItem, InputLabel, FormControl, Card, CardContent, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 const CertificatesForm = () => {
 
@@ -84,7 +86,19 @@ const CertificatesForm = () => {
       >
         Certifications
       </Typography>
-      <div>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        height: 'auto',
+        padding: '1em',
+        overflowX: 'auto',
+        gap: '16px',
+        flexWrap: 'nowrap',
+        borderRadius: '2px',
+        marginBottom: '1em',
+      }}>
         {certifications
           .sort((a, b) => {
             if (a.issueDate === b.issueDate) {
@@ -94,14 +108,29 @@ const CertificatesForm = () => {
           })
           .map(certification => {
             return (
-              <div key={certification.id}>
-                <p>{certification.CertificationRequirement.name}</p>
-                <p>{certification.issueDate}</p>
-                <p>{certification.diveShop}</p>
-                <p>{certification.instructor}</p>
-                <p>{certification.instructorNo}</p>
-                <button onClick={() => deleteCertification(certification.id)}>Delete</button>
-              </div>
+              <Card key={certification.id} sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                borderRadius: 2,
+                boxShadow: 4,
+                width: '400px',
+                height: '200px',
+                backgroundColor: (theme) => theme.palette.greyed
+              }}>
+                <CardContent style={{
+                  textAlign: 'center',
+                  position: 'relative',
+                }}>
+                  <IconButton aria-label="delete" size="small" style={{ position: 'absolute', right: 0, top: 0 }} onClick={() => deleteCertification(certification.id)}>
+                    <DeleteIcon sx={{ ":hover": { cursor: "pointer" } }} />                  </IconButton>
+                  <Typography variant="h6" sx={{ mt: 2 }}>{certification.CertificationRequirement.name}</Typography>
+                  <Typography variant="body1" sx={{ mb: 1.5 }}>{certification.issueDate}</Typography>
+                  <Typography variant="body2">{certification.diveShop}</Typography>
+                  <Typography variant="body2">{certification.instructor}</Typography>
+                  <Typography variant="body2">{certification.instructorNo}</Typography>
+                </CardContent>
+              </Card>
             );
           })}
       </div>
@@ -117,7 +146,7 @@ const CertificatesForm = () => {
                 rules={{ required: 'Certification is required' }}
                 render={({ field }) => (
                   <Select id="certificationOptions" {...field} onChange={handleInputChange}>
-                    <MenuItem value="">Select Certification</MenuItem>
+                    <MenuItem value="">Select Certification</MenuItem>:
                     {certificationOptions.sort((a, b) => a.name.localeCompare(b.name)).map(certification => {
                       return (
                         <MenuItem key={certification.id} value={certification.id}>{certification.name}</MenuItem>
