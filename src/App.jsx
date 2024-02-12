@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { useThemeStore } from '../src/services/store';
 import { CheckSession } from './services/Auth'
 import { useStore } from './services/store';
 import Nav from './components/Nav';
@@ -13,13 +14,15 @@ import AddDiveSite from './pages/AddDiveSite';
 import DiveSiteDetail from './pages/DiveSiteDetail';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import { ThemeProvider } from '@mui/material/styles'; 
 import CssBaseline from '@mui/material/CssBaseline';
 import './App.css';
 
-function App() {
+const App = () => {
 
   const user = useStore(state => state.user);
   const setUser = useStore(state => state.setUser);
+  const theme = useThemeStore(state => state.theme);
 
   const checkToken = async () => {
     const user = await CheckSession()
@@ -41,7 +44,7 @@ function App() {
 
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       {user ?
         <header>
@@ -65,7 +68,7 @@ function App() {
       <footer>
         <Footer />
       </footer>
-    </>
+    </ThemeProvider>
   );
 }
 

@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 
-export const themes = {
+const themes = {
   'blue-hole': createTheme({
     typography: {
       fontFamily: 'Lato, Arial, sans-serif',
@@ -58,3 +58,5 @@ export const themes = {
     },
   }),
 };
+
+export default themes;

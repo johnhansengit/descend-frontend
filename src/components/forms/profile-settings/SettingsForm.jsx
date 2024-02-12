@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
 import Client from '../../../services/api';
 import { useForm } from 'react-hook-form';
+import { useThemeStore } from '../../../services/store'; 
 
 const SettingsForm = () => {
+  const setTheme = useThemeStore((state) => state.setTheme);
+
   const { register, handleSubmit, setValue } = useForm();
 
   useEffect(() => {
@@ -23,6 +26,7 @@ const SettingsForm = () => {
   const onSubmit = async (data) => {
     try {
       await Client.put('/api/settings/', data);
+      setTheme(data.theme);
     } catch (error) {
       console.error('Error submitting form:', error);
     }
