@@ -13,7 +13,7 @@ import AddDiveSite from './pages/AddDiveSite';
 import DiveSiteDetail from './pages/DiveSiteDetail';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/auth/ProtectedRoute';
-import { ThemeProvider, Box } from '@mui/material'; // Added Box import
+import { ThemeProvider, AppBar, Toolbar, Box } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import './App.css';
 
@@ -43,14 +43,12 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{
-        position: 'fixed',
-        top: 10,
-        right: 0,
-        zIndex: 1201
-      }}>
-        {user && <Nav user={user} handleLogOut={handleLogOut} />}
-      </Box>
+      <AppBar position="sticky" >
+        <Toolbar >
+          <Box sx={{ flexGrow: 1 }}></Box>
+          {user && <Nav user={user} handleLogOut={handleLogOut} />}
+        </Toolbar>
+      </AppBar>
       <main>
         <Routes>
           <Route path="/" element={<Landing user={user} setUser={setUser} />} />

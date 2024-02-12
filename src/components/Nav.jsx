@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Drawer, IconButton, List, ListItem, ListItemText, Box } from '@mui/material';
+import { Drawer, IconButton, List, ListItem, ListItemText } from '@mui/material';
 import ExploreIcon from '@mui/icons-material/Explore';
 
 const Nav = ({ handleLogOut }) => {
@@ -15,20 +15,17 @@ const Nav = ({ handleLogOut }) => {
 
   return (
     <nav>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mr: 2 }}>
-        <IconButton
-          color="inherit"
-          aria-label="menu"
-          onClick={toggleDrawer(true)}
-        >
-          <ExploreIcon 
-            sx={{
-              fontSize: 40,
-              color: (theme) => theme.palette.secondary.main,
-            }}
-          />
-        </IconButton>
-      </Box>
+      <IconButton
+        aria-label="menu"
+        onClick={toggleDrawer(true)}
+      >
+        <ExploreIcon
+          sx={{
+            fontSize: 40,
+            color: (theme) => theme.palette.secondary.main,
+          }}
+        />
+      </IconButton>
       <Drawer
         anchor="right"
         open={isDrawerOpen}
