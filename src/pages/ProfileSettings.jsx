@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Box, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useStore } from '../services/store';
@@ -11,6 +12,12 @@ import ChangeUserInfoForm from '../components/forms/profile-settings/ChangeUserI
 
 const ProfileSettings = () => {
     const { user } = useStore();
+
+    const [expanded, setExpanded] = useState(false);
+
+    const handleChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+    };
 
     return (
         <Box
@@ -67,7 +74,7 @@ const ProfileSettings = () => {
                     overflow: 'hidden',
                 }}
             >
-                <Accordion>
+                <Accordion expanded={expanded === 'profile'} onChange={handleChange('profile')}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography>Profile</Typography>
                     </AccordionSummary>
@@ -76,7 +83,7 @@ const ProfileSettings = () => {
                     </AccordionDetails>
                 </Accordion>
 
-                <Accordion>
+                <Accordion expanded={expanded === 'certifications'} onChange={handleChange('certifications')}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography>Certifications</Typography>
                     </AccordionSummary>
@@ -85,7 +92,7 @@ const ProfileSettings = () => {
                     </AccordionDetails>
                 </Accordion>
 
-                <Accordion>
+                <Accordion expanded={expanded === 'previousDives'} onChange={handleChange('previousDives')}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography>Previous Dives</Typography>
                     </AccordionSummary>
@@ -94,7 +101,7 @@ const ProfileSettings = () => {
                     </AccordionDetails>
                 </Accordion>
 
-                <Accordion>
+                <Accordion  expanded={expanded === 'settings'} onChange={handleChange('settings')}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography>Settings</Typography>
                     </AccordionSummary>
@@ -103,7 +110,7 @@ const ProfileSettings = () => {
                     </AccordionDetails>
                 </Accordion>
 
-                <Accordion>
+                <Accordion expanded={expanded === 'update'} onChange={handleChange('update')}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography>Update Username or Login</Typography>
                     </AccordionSummary>

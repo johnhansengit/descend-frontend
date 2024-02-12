@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import Client from '../../../services/api';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller, useWatch } from 'react-hook-form';
 import { useStore } from '../../../services/store';
+import { Typography, Box, Grid, TextField, Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 
 const ProfileForm = () => {
 
     const { isDirty, setIsDirty } = useStore();
 
-    const { register, handleSubmit, watch, setValue } = useForm({
+    const { control, register, handleSubmit, setValue } = useForm({
         defaultValues: {
             heightUnit: 'cm',
             weightUnit: 'kg'
@@ -17,7 +18,11 @@ const ProfileForm = () => {
     const [profileExists, setProfileExists] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const heightUnit = watch('heightUnit');
+    const heightUnit = useWatch({
+        control,
+        name: 'heightUnit',
+        defaultValue: 'cm'
+    });
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -69,75 +74,120 @@ const ProfileForm = () => {
         }
     };
 
-
     return (
-        <div>
-            <div>
-                <h2>Profile</h2>
-            </div>
+        <Box
+            sx={{
+                backgroundColor: (theme) => theme.palette.foreground,
+                color: (theme) => theme.palette.text.primary,
+                fontFamily: (theme) => theme.typography.fontFamily,
+                p: 3,
+                borderRadius: 2,
+            }}
+        >
+            <Typography 
+                variant="h4" 
+                sx={{ mb: 2 }}
+            >
+                Profile
+            </Typography>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div>
-                    <label htmlFor="profileFirstName">First Name:</label>
-                    <input id="profileFirstName" {...register('firstName')} onChange={handleInputChange} />
-                </div>
-                <div>
-                    <label htmlFor="profileLastName">Last Name:</label>
-                    <input id="profileLastName" {...register('lastName')} onChange={handleInputChange} />
-                </div>
-                <div>
-                    <label htmlFor="profileDob">Date of Birth:</label>
-                    <input type="date" id="profileDob" {...register('dob')} onChange={handleInputChange} />
-                </div>
-                <div>
-                    <label htmlFor="profileHeightUnit">Height:</label>
-                    <select id="profileHeightUnit" {...register('heightUnit')} onChange={handleInputChange}>
-                        <option value="cm">cm</option>
-                        <option value="ft/in">ft/in</option>
-                    </select>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <TextField id="profileFirstName" label="First Name" {...register('firstName')} onChange={handleInputChange} fullWidth InputLabelProps={{ shrink: true }} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField id="profileLastName" label="Last Name" {...register('lastName')} onChange={handleInputChange} fullWidth InputLabelProps={{ shrink: true }} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField id="profileDob" type="date" label="Date of Birth" {...register('dob')} onChange={handleInputChange} fullWidth InputLabelProps={{ shrink: true }} />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <FormControl fullWidth>
+                            <InputLabel id="profileHeightUnit-label">Height Unit</InputLabel>
+                            <Controller
+                                name="heightUnit"
+                                control={control}
+                                defaultValue="cm"
+                                render={({ field }) => (
+                                    <Select id="profileHeightUnit" labelId="profileHeightUnit-label" {...field}>
+                                        <MenuItem value="cm">cm</MenuItem>
+                                        <MenuItem value="ft/in">ft/in</MenuItem>
+                                    </Select>
+                                )}
+                            />
+                        </FormControl>
+                    </Grid>
                     {heightUnit === 'cm' ? (
-                        <input id="profileHeightCm" type="number" min="0" step="1" {...register('heightCm')} onChange={handleInputChange} />
+                        <Grid item xs={8}>
+                            <TextField id="profileHeightCm" type="number" min="0" step="1" {...register('heightCm')} onChange={handleInputChange} fullWidth />
+                        </Grid>
                     ) : (
                         <>
-                            <input id="profileHeightFt" type="number" min="0" step="1" placeholder="ft" {...register('heightFt')} onChange={handleInputChange} />
-                            <input id="profileHeightIn" type="number" min="0" step="1" placeholder="in" {...register('heightIn')} onChange={handleInputChange} />
+                            <Grid item xs={4}>
+                                <TextField id="profileHeightFt" type="number" min="0" step="1" placeholder="ft" {...register('heightFt')} onChange={handleInputChange} fullWidth />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <TextField id="profileHeightIn" type="number" min="0" step="1" placeholder="in" {...register('heightIn')} onChange={handleInputChange} fullWidth />
+                            </Grid>
                         </>
                     )}
-                </div>
-                <div>
-                    <label htmlFor="profileWeightUnit">Weight:</label>
-                    <select id="profileWeightUnit" {...register('weightUnit')} onChange={handleInputChange}>
-                        <option value="kg">kg</option>
-                        <option value="lbs">lbs</option>
-                    </select>
-                    <input id="profileWeight" type="number" min="0" step="1" {...register('weight')} onChange={handleInputChange} />
-                </div>
-                <div>
-                    <label htmlFor="profileAgency">Diver Certification Agency:</label>
-                    <select id="profileAgency" {...register('agency')} onChange={handleInputChange}>
-                        <option value="PADI">PADI</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div>
-                    <label htmlFor="profileDiverNo">Diver Certification Number:</label>
-                    <input id="profileDiverNo" {...register('diverNo')} onChange={handleInputChange} />
-                </div>
-                <div>
-                    <label htmlFor="profileInsuranceProvider">Dive Insurance Provider:</label>
-                    <input id="profileInsuranceProvider" {...register('insuranceProvider')} onChange={handleInputChange} />
-                </div>
-                <div>
-                    <label htmlFor="profileDiveInsuranceNo">Dive Insurance Number:</label>
-                    <input id="profileDiveInsuranceNo" {...register('diveInsuranceNo')} onChange={handleInputChange} />
-                </div>
-                <button type="submit">{profileExists ? 'Update' : 'Submit'}</button>
+                    <Grid item xs={4}>
+                        <FormControl fullWidth>
+                            <InputLabel id="profileWeightUnit-label">Weight Unit</InputLabel>
+                            <Controller
+                                name="weightUnit"
+                                control={control}
+                                defaultValue="kg"
+                                render={({ field }) => (
+                                    <Select id="profileWeightUnit" labelId="profileWeightUnit-label" {...field} onChange={handleInputChange}>
+                                        <MenuItem value="kg">kg</MenuItem>
+                                        <MenuItem value="lbs">lbs</MenuItem>
+                                    </Select>
+                                )}
+                            />
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={8}>
+                        <TextField id="profileWeight" type="number" min="0" step="1" {...register('weight')} onChange={handleInputChange} fullWidth />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormControl fullWidth>
+                            <InputLabel id="profileAgency-label">Diver Certification Agency</InputLabel>
+                            <Controller
+                                name="agency"
+                                control={control}
+                                defaultValue=""
+                                render={({ field }) => (
+                                    <Select id="profileAgency" labelId="profileAgency-label" {...field} onChange={handleInputChange}>
+                                        <MenuItem value="PADI">PADI</MenuItem>
+                                        <MenuItem value="Other">Other</MenuItem>
+                                    </Select>
+                                )}
+                            />
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField id="profileDiverNo" label="Diver Certification Number" {...register('diverNo')} onChange={handleInputChange} fullWidth InputLabelProps={{ shrink: true }} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField id="profileInsuranceProvider" label="Dive Insurance Provider" {...register('insuranceProvider')} onChange={handleInputChange} fullWidth InputLabelProps={{ shrink: true }} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField id="profileDiveInsuranceNo" label="Dive Insurance Number" {...register('diveInsuranceNo')} onChange={handleInputChange} fullWidth InputLabelProps={{ shrink: true }} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button type="submit" fullWidth sx={{ backgroundColor: (theme) => theme.palette.accent.main }}>
+                            {profileExists ? 'Update' : 'Submit'}
+                        </Button>
+                    </Grid>
+                </Grid>
             </form>
             {isSubmitted && (
                 <div>
                     Profile Updated!
                 </div>
             )}
-        </div>
+        </Box>
     );
 };
 

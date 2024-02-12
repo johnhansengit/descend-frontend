@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Client from '../../../services/api';
 import { useForm } from 'react-hook-form';
+import { Typography, Box, Grid, TextField, Button } from '@mui/material';
 
 const PrevDivesForm = ({ userId }) => {
   const { register, handleSubmit, setValue } = useForm();
@@ -56,59 +57,76 @@ const PrevDivesForm = ({ userId }) => {
   };
 
   return (
-    <div>
-      <div>
-        <h2>Previous Dives</h2>
-      </div>
+    <Box
+      sx={{
+        backgroundColor: (theme) => theme.palette.foreground,
+        color: (theme) => theme.palette.text.primary,
+        fontFamily: (theme) => theme.typography.fontFamily,
+        p: 3,
+        borderRadius: 2,
+      }}
+    >
+      <Typography
+        variant="h4"
+        sx={{ mb: 2 }}
+      >
+        Previous Dives
+      </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {/* Open Water Dives */}
-        {diveTypes
-          .filter((diveType) => diveType.id === 1)
-          .map((diveType) => (
-            <div key={diveType.id}>
-              <label htmlFor={`diveType-${diveType.id}`}>{diveType.diveType}</label>
-              <input
-                id={`diveType-${diveType.id}`}
-                name={`diveType-${diveType.id}`}
-                type="number"
-                min="0"
-                {...register(`diveType-${diveType.id}`, { valueAsNumber: true })}
-              />
-            </div>
-          ))}
-        {/* Deep Dives */}
-        {diveTypes
-          .filter((diveType) => diveType.id === 7)
-          .map((diveType) => (
-            <div key={diveType.id}>
-              <label htmlFor={`diveType-${diveType.id}`}>{diveType.diveType}</label>
-              <input
-                id={`diveType-${diveType.id}`}
-                name={`diveType-${diveType.id}`}
-                type="number"
-                min="0"
-                {...register(`diveType-${diveType.id}`, { valueAsNumber: true })}
-              />
-            </div>
-          ))}
-        {diveTypes
-          .filter((diveType) => diveType.id !== 1 && diveType.id !== 7 && diveType.id !== 24)
-          .sort((a, b) => a.diveType.localeCompare(b.diveType))
-          .map((diveType) => (
-            <div key={diveType.id}>
-              <label htmlFor={`diveType-${diveType.id}`}>{diveType.diveType}</label>
-              <input
-                id={`diveType-${diveType.id}`}
-                name={`diveType-${diveType.id}`}
-                type="number"
-                min="0"
-                {...register(`diveType-${diveType.id}`, { valueAsNumber: true })}
-              />
-            </div>
-          ))}
-        <button type="submit">{prevDivesData ? 'Update' : 'Submit'}</button>
+        <Grid container spacing={2}>
+          {/* Open Water Dives */}
+          {diveTypes
+            .filter((diveType) => diveType.id === 1)
+            .map((diveType) => (
+              <Grid item xs={6} key={diveType.id}>
+                <TextField
+                  id={`diveType-${diveType.id}`}
+                  label={diveType.diveType}
+                  type="number"
+                  min="0"
+                  fullWidth
+                  {...register(`diveType-${diveType.id}`, { valueAsNumber: true })}
+                />
+              </Grid>
+            ))}
+          {/* Deep Dives */}
+          {diveTypes
+            .filter((diveType) => diveType.id === 7)
+            .map((diveType) => (
+              <Grid item xs={6} key={diveType.id}>
+                <TextField
+                  id={`diveType-${diveType.id}`}
+                  label={diveType.diveType}
+                  type="number"
+                  min="0"
+                  fullWidth
+                  {...register(`diveType-${diveType.id}`, { valueAsNumber: true })}
+                />
+              </Grid>
+            ))}
+          {diveTypes
+            .filter((diveType) => diveType.id !== 1 && diveType.id !== 7 && diveType.id !== 24)
+            .sort((a, b) => a.diveType.localeCompare(b.diveType))
+            .map((diveType) => (
+              <Grid item xs={4} key={diveType.id}>
+                <TextField
+                  id={`diveType-${diveType.id}`}
+                  label={diveType.diveType}
+                  type="number"
+                  min="0"
+                  fullWidth
+                  {...register(`diveType-${diveType.id}`, { valueAsNumber: true })}
+                />
+              </Grid>
+            ))}
+          <Grid item xs={12}>
+            <Button type="submit" fullWidth sx={{ backgroundColor: (theme) => theme.palette.accent.main }}>
+              {prevDivesData ? 'Update' : 'Submit'}
+            </Button>
+          </Grid>
+        </Grid>
       </form>
-    </div>
+    </Box>
   );
 };
 
