@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useStore } from '../../services/store';  
+import { useStore } from '../../services/store';
 import { ft2m } from '../../helpers/conversionUtils';
 import Client from '../../services/api';
 import { getNames } from 'country-list';
+import { Grid, Slider, TextField, Button, Box, Typography, FormControl, InputLabel, Select, MenuItem, FormControlLabel, RadioGroup, Radio, Alert } from '@mui/material';
 
 const DiveSiteForm = () => {
 
@@ -14,11 +15,29 @@ const DiveSiteForm = () => {
 
   const { register, handleSubmit, formState: { errors }, watch, reset } = useForm();
   const [isDiveSiteDuplicate, setIsDiveSiteDuplicate] = useState(false);
-  
+
   const country = watch('country');
   const name = watch('name');
-  
+  const depthUnit = watch('depthUnit');
+  const current = watch('current');
+  const [depth, setDepth] = useState([0, 40]);
+  const [sliderChanged, setSliderChanged] = useState(false);
+
   const [countries, setCountries] = useState([]);
+
+  const handleSliderChange = (event, newValue) => {
+    setDepth(newValue);
+    setSliderChanged(true);
+  };
+
+  useEffect(() => {
+    if (depthUnit === 'ft') {
+      setDepth([depth[0], 130]);
+    } else {
+      setDepth([depth[0], 40]);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [depthUnit]);
 
   useEffect(() => {
     setCountries(getNames());
@@ -40,16 +59,19 @@ const DiveSiteForm = () => {
 
   const onSubmit = async (data) => {
     try {
+      data.minDepth = depth[0];
+      data.maxDepth = depth[1];
+
       if (data.depthUnit === 'ft') {
         data.minDepth = ft2m(data.minDepth);
         data.maxDepth = ft2m(data.maxDepth);
       }
-  
+
       delete data.depthUnit;
       data.userId = user.id
-  
+
       const response = await Client.post('/api/diveSites/add', data);
-  
+
       console.log('Success:', response.data);
 
       reset();
@@ -60,95 +82,155 @@ const DiveSiteForm = () => {
       console.error('Error:', error);
     }
   };
-  
 
-return (
-  <div>
-    <div><h2>Add a Dive Site</h2></div>
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <label htmlFor="divesiteName">Dive Site Name</label>
-        <input id="divesiteName" {...register('name', { required: true })} />
-        {errors.name && <p>This field is required</p>}
-      </div>
 
-      <div>
-        <label htmlFor="divesiteCountry">Country</label>
-        <select id="divesiteCountry" {...register('country', { required: true })}>
-          <option value="">Select a country</option>
+  return (
+    <Box
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
+      sx={{
+        mt: 1,
+        mb: 1,
+        padding: 3,
+        borderRadius: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: (theme) => theme.palette.foreground,
+        color: (theme) => theme.palette.text.primary,
+        fontFamily: (theme) => theme.typography.fontFamily,
+      }}
+    >
+      <Typography component="h1" variant="h5" sx={{ textAlign: 'center' }}>
+        Add a Dive Site
+      </Typography>
+      <TextField
+        margin="normal"
+        fullWidth
+        id="divesiteName"
+        label="Dive Site Name"
+        name="name"
+        autoComplete="name"
+        autoFocus
+        {...register('name', { required: true })}
+      />
+      {errors.name && <Alert severity="error">This field is required</Alert>}
+      <FormControl fullWidth margin="normal">
+        <InputLabel id="divesiteCountry-label">Country</InputLabel>
+        <Select
+          labelId="divesiteCountry-label"
+          id="divesiteCountry"
+          value={country}
+          label="Country"
+          {...register('country', { required: true })}
+        >
+          <MenuItem value="">
+            <em>Select country</em>
+          </MenuItem>
           {countries.map((country, index) => (
-            <option key={index} value={country}>
+            <MenuItem key={index} value={country}>
               {country}
-            </option>
+            </MenuItem>
           ))}
-        </select>
-        {errors.country && <p>This field is required</p>}
-      </div>
-
-      <div>
-        <label htmlFor="divesiteMinDepth">Minimum Depth of Interest</label>
-        <input type="number" id="divesiteMinDepth" {...register('minDepth', { required: true })} />
-        {errors.minDepth && <p>This field is required</p>}
-      </div>
-
-      <div>
-        <label htmlFor="divesiteMaxDepth">Maximum Depth of Interest</label>
-        <input type="number" id="divesiteMaxDepth" {...register('maxDepth', { required: true })} />
-        {errors.maxDepth && <p>This field is required</p>}
-      </div>
-
-      <div>
-        <label htmlFor="divesiteDepthUnit">Depth Unit</label>
-        <select id="divesiteDepthUnit" {...register('depthUnit', { required: true })}>
-          <option value="">Select unit</option>
-          <option value="m">m</option>
-          <option value="ft">ft</option>
-        </select>
-        {errors.depthUnit && <p>This field is required</p>}
-      </div>
-
-      <div>
-        <label htmlFor="divesiteCurrent">Current</label>
-        <select id="divesiteCurrent" {...register('current', { required: true })}>
-          <option value="">Select current strength</option>
-          <option value="none">None</option>
-          <option value="mild">Mild</option>
-          <option value="moderate">Moderate</option>
-          <option value="strong">Strong</option>
-        </select>
-        {errors.current && <p>This field is required</p>}
-      </div>
-
-      <div>
-        <label htmlFor="divesiteDescription">Description</label>
-        <textarea id="divesiteDescription" {...register('description', { required: true })} />
-        {errors.description && <p>This field is required</p>}
-      </div>
-
-      <fieldset>
-        <legend>Salinity</legend>
-        <div>
-          <label htmlFor="divesiteSalinitySalt">
-            <input type="radio" id="divesiteSalinitySalt" value="salt" {...register('salinity', { required: true })} />
-            Salt
-          </label>
-          <label htmlFor="divesiteSalinityFresh">
-            <input type="radio" id="divesiteSalinityFresh" value="fresh" {...register('salinity', { required: true })} />
-            Fresh
-          </label>
-          <label htmlFor="divesiteSalinityBrackish">
-            <input type="radio" id="divesiteSalinityBrackish" value="brackish" {...register('salinity', { required: true })} />
-            Brackish
-          </label>
-        </div>
-        {errors.salinity && <p>This field is required</p>}
-      </fieldset>
-
-      <button type="submit" disabled={isDiveSiteDuplicate}>Submit</button>
-      {isDiveSiteDuplicate && <p>A dive site with that name already exists in {country}.</p>}
-    </form>
-  </div>
-);
+        </Select>
+      </FormControl>
+      {errors.country && <Alert severity="error">This field is required</Alert>}
+      <Grid container spacing={4}>
+        <Grid item xs={8}>
+          <Box sx={{ width: '100%', mt: 2, mb: 2 }}>
+            <Typography id="depth-slider" gutterBottom>
+              Min and Max Depth of Interest
+            </Typography>
+            <Slider
+              id="divesiteDepth"
+              value={depth}
+              onChange={handleSliderChange}
+              valueLabelDisplay="auto"
+              aria-labelledby="depth-slider"
+              min={0}
+              max={depthUnit === 'ft' ? 130 : 40}
+              sx={{
+                color: (theme) => sliderChanged ? theme.palette.primary.main : theme.palette.greyed,
+              }}
+            />
+            {errors.minDepth && <Alert severity="error">Minimum depth is required</Alert>}
+            {errors.maxDepth && <Alert severity="error">Maximum depth is required</Alert>}
+          </Box>
+        </Grid>
+        <Grid item xs={4}>
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="divesiteDepthUnit-label">Depth Unit</InputLabel>
+            <Select
+              labelId="divesiteDepthUnit-label"
+              id="divesiteDepthUnit"
+              value={depthUnit}
+              label="Depth Unit"
+              {...register('depthUnit', { required: true })}
+            >
+              <MenuItem value="">
+                <em>Select depth unit</em>
+              </MenuItem>
+              <MenuItem value="m">m</MenuItem>
+              <MenuItem value="ft">ft</MenuItem>
+            </Select>
+          </FormControl>
+          {errors.depthUnit && <Alert severity="error">This field is required</Alert>}
+        </Grid>
+      </Grid>
+      <FormControl fullWidth margin="normal">
+        <InputLabel id="divesiteCurrent-label">Current</InputLabel>
+        <Select
+          labelId="divesiteCurrent-label"
+          id="divesiteCurrent"
+          value={current}
+          label="Current"
+          {...register('current', { required: true })}
+        >
+          <MenuItem value="">
+            <em>Select current strength</em>
+          </MenuItem>
+          <MenuItem value="none">None</MenuItem>
+          <MenuItem value="mild">Mild</MenuItem>
+          <MenuItem value="moderate">Moderate</MenuItem>
+          <MenuItem value="strong">Strong</MenuItem>
+        </Select>
+      </FormControl>
+      {errors.current && <Alert severity="error">This field is required</Alert>}
+      <TextField
+        margin="normal"
+        fullWidth
+        id="divesiteDescription"
+        label="Description"
+        name="description"
+        multiline
+        rows={4}
+        {...register('description', { required: true })}
+      />
+      {errors.description && <Alert severity="error">This field is required</Alert>}
+      <FormControl component="fieldset" fullWidth margin="normal">
+        <RadioGroup row aria-label="salinity" name="salinity" {...register('salinity', { required: true })}>
+          <FormControlLabel value="salt" control={<Radio />} label="Salt" />
+          <FormControlLabel value="fresh" control={<Radio />} label="Fresh" />
+          <FormControlLabel value="brackish" control={<Radio />} label="Brackish" />
+        </RadioGroup>
+      </FormControl>
+      {errors.salinity && <Alert severity="error">This field is required</Alert>}
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        sx={{
+          mt: 3,
+          mb: 2,
+          backgroundColor: (theme) => theme.palette.accent.main,
+        }}
+        disabled={isDiveSiteDuplicate}
+      >
+        Submit
+      </Button>
+      {isDiveSiteDuplicate && <Alert severity="error">A dive site with that name already exists in {country}.</Alert>}
+    </Box>
+  );
 };
 
 export default DiveSiteForm;

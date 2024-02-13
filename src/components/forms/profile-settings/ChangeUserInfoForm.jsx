@@ -169,92 +169,92 @@ const ChangeUserInfoForm = () => {
         Update Username or Login
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <TextField
-          margin="normal"
-          fullWidth
-          id="changeNewUserName"
-          label="New Username"
-          name="newUserName"
-          autoComplete="username"
-          autoFocus
-          value={formValues.newUserName}
-          onChange={handleChange}
-        />
-        {userNameError && <Alert severity="error">{userNameError}</Alert>}
-        <TextField
-          margin="normal"
-          fullWidth
-          id="changeEmail"
-          label="New Email"
-          name="email"
-          autoComplete="email"
-          value={formValues.email}
-          onChange={handleChange}
-        />
-        {emailError && <Alert severity="error">{emailError}</Alert>}
-        <TextField
-          margin="normal"
-          fullWidth
-          name="newPassword"
-          label="New Password"
-          type="password"
-          id="changeNewPassword"
-          value={formValues.newPassword}
-          onChange={handleChange}
-        />
-        <TextField
-          margin="normal"
-          fullWidth
-          name="confirmNewPassword"
-          label="Confirm New Password"
-          type="password"
-          id="changeConfirmNewPassword"
-          value={formValues.confirmNewPassword}
-          onChange={handleChange}
-        />
-        {passwordErrors.length > 0 && passwordErrors.map((error, index) => (
-          <Box width="100%" key={index}>
-            <Alert severity="error" >{error}</Alert>
-          </Box>
-        ))}
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          name="password"
-          label="Current Password (required to make changes)"
-          type="password"
-          id="changeCurrentPassword"
-          value={formValues.password}
-          onChange={handleChange}
-          sx={{
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': { // Normal state
-                borderColor: (theme) => theme.palette.accent.main,
-                borderWidth: 3,
-              },
-              '&:hover fieldset': { // Hover state
-                borderColor: (theme) => theme.palette.accent.main,
-              },
-              '&.Mui-focused fieldset': { // Focused state
-                borderColor: (theme) => theme.palette.accent.main,
-              },
+      <TextField
+        margin="normal"
+        fullWidth
+        id="changeNewUserName"
+        label="New Username"
+        name="newUserName"
+        autoComplete="username"
+        autoFocus
+        value={formValues.newUserName}
+        onChange={handleChange}
+      />
+      {userNameError && <Alert severity="error">{userNameError}</Alert>}
+      <TextField
+        margin="normal"
+        fullWidth
+        id="changeEmail"
+        label="New Email"
+        name="email"
+        autoComplete="email"
+        value={formValues.email}
+        onChange={handleChange}
+      />
+      {emailError && <Alert severity="error">{emailError}</Alert>}
+      <TextField
+        margin="normal"
+        fullWidth
+        name="newPassword"
+        label="New Password"
+        type="password"
+        id="changeNewPassword"
+        value={formValues.newPassword}
+        onChange={handleChange}
+      />
+      <TextField
+        margin="normal"
+        fullWidth
+        name="confirmNewPassword"
+        label="Confirm New Password"
+        type="password"
+        id="changeConfirmNewPassword"
+        value={formValues.confirmNewPassword}
+        onChange={handleChange}
+      />
+      {passwordErrors.length > 0 && passwordErrors.map((error, index) => (
+        <Box width="100%" key={index}>
+          <Alert severity="error" >{error}</Alert>
+        </Box>
+      ))}
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        name="password"
+        label="Current Password (required to make changes)"
+        type="password"
+        id="changeCurrentPassword"
+        value={formValues.password}
+        onChange={handleChange}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': { // Normal state
+              borderColor: (theme) => theme.palette.accent.main,
+              borderWidth: 3,
             },
-          }}
-        />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{
-            mt: 3,
-            mb: 2,
-            backgroundColor: (theme) => theme.palette.accent.main,
-          }}
-          disabled={!formValues.password}
-        >
-          Update
-        </Button>
+            '&:hover fieldset': { // Hover state
+              borderColor: (theme) => theme.palette.accent.main,
+            },
+            '&.Mui-focused fieldset': { // Focused state
+              borderColor: (theme) => theme.palette.accent.main,
+            },
+          },
+        }}      
+      />
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        sx={{
+          mt: 3,
+          mb: 2,
+          backgroundColor: (theme) => theme.palette.accent.main,
+        }}
+        disabled={!formValues.password}
+      >
+        Update
+      </Button>
       </form>
     </Box>
   );
