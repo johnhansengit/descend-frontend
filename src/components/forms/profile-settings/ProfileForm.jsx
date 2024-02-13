@@ -8,7 +8,7 @@ const ProfileForm = () => {
 
     const { isDirty, setIsDirty } = useStore();
 
-    const { control, register, handleSubmit, setValue } = useForm({
+    const { control, register, handleSubmit, setValue, reset } = useForm({
         defaultValues: {
             heightUnit: 'cm',
             weightUnit: 'kg'
@@ -40,7 +40,7 @@ const ProfileForm = () => {
         };
 
         fetchProfile();
-    }, [setValue]);
+    }, [setValue, reset]);
 
     const handleInputChange = () => {
         if (!isDirty) {
