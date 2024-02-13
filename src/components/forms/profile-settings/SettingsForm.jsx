@@ -51,6 +51,9 @@ const SettingsForm = () => {
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2}>
+        <Grid item xs={12}>
+            <Typography>Color Theme</Typography>
+          </Grid>
           <Grid item xs={12}>
             <FormControl fullWidth>
               <Controller
