@@ -36,7 +36,7 @@ const DiveSiteForm = () => {
     } else {
       setDepth([depth[0], 40]);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [depthUnit]);
 
   useEffect(() => {
@@ -138,8 +138,12 @@ const DiveSiteForm = () => {
       <Grid container spacing={4}>
         <Grid item xs={8}>
           <Box sx={{ width: '100%', mt: 2, mb: 2 }}>
-            <Typography id="depth-slider" gutterBottom>
-              Min and Max Depth of Interest
+            <Typography
+              id="depth-slider"
+              sx={{ color: (theme) => theme.palette.text.main }}
+              gutterBottom
+            >
+              Min/Max Depth of Interest
             </Typography>
             <Slider
               id="divesiteDepth"
@@ -159,12 +163,18 @@ const DiveSiteForm = () => {
         </Grid>
         <Grid item xs={4}>
           <FormControl fullWidth margin="normal">
-            <InputLabel id="divesiteDepthUnit-label">Depth Unit</InputLabel>
+            <InputLabel
+              id="divesiteDepthUnit-label"
+              sx={{ mt: 2 }}
+            >
+              Unit
+            </InputLabel>
             <Select
               labelId="divesiteDepthUnit-label"
               id="divesiteDepthUnit"
               value={depthUnit}
               label="Depth Unit"
+              sx={{ mt: 2 }}
               {...register('depthUnit', { required: true })}
             >
               <MenuItem value="">

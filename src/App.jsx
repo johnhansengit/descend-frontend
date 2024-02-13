@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useThemeStore, useStore } from './services/store'; // Adjusted import path
 import { CheckSession } from './services/Auth';
@@ -21,6 +21,12 @@ const App = () => {
   const user = useStore(state => state.user);
   const setUser = useStore(state => state.setUser);
   const theme = useThemeStore(state => state.theme);
+
+  const [isAddDiveSiteOpen, setIsAddDiveSiteOpen] = useState(false);
+
+  const toggleAddDiveSite = (open) => () => {
+    setIsAddDiveSiteOpen(open);
+  };
 
   const checkToken = async () => {
     const user = await CheckSession();
@@ -46,9 +52,10 @@ const App = () => {
       <AppBar position="sticky" >
         <Toolbar >
           <Box sx={{ flexGrow: 1 }}></Box>
-          {user && <Nav user={user} handleLogOut={handleLogOut} />}
+          {user && <Nav user={user} handleLogOut={handleLogOut} toggleAddDiveSite={toggleAddDiveSite} />}
         </Toolbar>
       </AppBar>
+      <AddDiveSite open={isAddDiveSiteOpen} onClose={toggleAddDiveSite(false)} />
       <main>
         <Routes>
           <Route path="/" element={<Landing user={user} setUser={setUser} />} />

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Drawer, IconButton, List, ListItem, ListItemText } from '@mui/material';
 import ExploreIcon from '@mui/icons-material/Explore';
 
-const Nav = ({ handleLogOut }) => {
+const Nav = ({ handleLogOut, toggleAddDiveSite }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const toggleDrawer = (open) => (event) => {
@@ -11,6 +11,11 @@ const Nav = ({ handleLogOut }) => {
       return;
     }
     setIsDrawerOpen(open);
+  };
+  
+  const handleAddDiveSiteClick = () => {
+    setIsDrawerOpen(false); 
+    toggleAddDiveSite(true)();
   };
 
   return (
@@ -51,7 +56,7 @@ const Nav = ({ handleLogOut }) => {
           <ListItem button component={Link} to="/dive-sites" onClick={toggleDrawer(false)}>
             <ListItemText primary="Dive Sites" />
           </ListItem>
-          <ListItem button component={Link} to="/dive-sites/add" onClick={toggleDrawer(false)}>
+          <ListItem button onClick={handleAddDiveSiteClick}>
             <ListItemText primary="Add a Dive Site" />
           </ListItem>
           <ListItem button component={Link} to="/profile-settings" onClick={toggleDrawer(false)}>

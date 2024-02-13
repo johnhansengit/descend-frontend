@@ -12,7 +12,7 @@ const themes = {
       accent: { main: '#ffcc00' },
       text: { primary: '#01225e' },
       foreground: '#ffffff',
-      greyed: '#f7f7f8',
+      greyed: '#e7e7e8',
     },
   }),
   'night-dive': createTheme({
