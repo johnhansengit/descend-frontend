@@ -90,11 +90,15 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
         await fetchUserSettings();
       }
     };
-
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    setValue('tempUnit', tempUnit);
+    setValue('maxDepthUnit', maxDepthUnit);
+    setValue('visibilityUnit', visibilityUnit);
+  }, [tempUnit, maxDepthUnit, visibilityUnit, setValue]);
 
   const handleInputChange = () => {
     if (!isDirty) {
@@ -140,6 +144,9 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
   const onSubmit = async (data) => {
     let diveLogData = {
       ...data,
+      tempUnit: data.tempUnit || tempUnit,
+      maxDepthUnit: data.maxDepthUnit || maxDepthUnit,
+      visibilityUnit: data.visibilityUnit || visibilityUnit,
       diveTypeIds: diveType,
       gas: gas,
       tank: tank,
@@ -155,19 +162,19 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
     }
 
     try {
-      const endpoint = diveLogExists ? '/api/diveLogs' : `/api/diveLogs/${diveLogId}`;
+      const endpoint = diveLogExists ? `/api/diveLogs/${diveLogId}` : '/api/diveLogs';
       const method = diveLogExists ? 'put' : 'post';
-  
+
       const response = await Client[method](endpoint, diveLogData);
       console.log('Dive Log submitted:', response);
-  
+
       setIsDirty(false);
       setIsSubmitted(true);
     } catch (error) {
       console.error('Error submitting form:', error);
     }
   };
-  
+
 
   return (
     <>
