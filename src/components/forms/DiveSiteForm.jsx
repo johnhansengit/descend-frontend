@@ -9,6 +9,7 @@ import { Grid, Slider, TextField, Button, Box, Typography, FormControl, InputLab
 const DiveSiteForm = ({ onClose }) => {
 
   const user = useStore(state => state.user);
+  const { addDiveSite } = useStore();
 
   const { register, handleSubmit, formState: { errors }, watch, reset } = useForm();
   const [isDiveSiteDuplicate, setIsDiveSiteDuplicate] = useState(false);
@@ -64,9 +65,8 @@ const DiveSiteForm = ({ onClose }) => {
       data.userId = user.id;
 
       const response = await Client.post('/api/diveSites/add', data);
-
-      console.log('Success:', response.data);
-
+      const newDiveSite = response.data;
+      addDiveSite(newDiveSite);
       onClose();
       reset();
 

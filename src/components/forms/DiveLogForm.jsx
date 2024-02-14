@@ -8,7 +8,7 @@ import { ListItemText, FormLabel, RadioGroup, Radio, Typography, Box, Grid, Text
 
 const DiveLogForm = ({ editMode, diveLogId, toggleAddDiveSite }) => {
 
-  const { isDirty, setIsDirty } = useStore();
+  const { isDirty, setIsDirty, diveSites, fetchDiveSites } = useStore();
   const { register, handleSubmit, setValue, watch } = useForm();
 
   const wetsuitThickness = watch('wetsuitThickness');
@@ -17,7 +17,6 @@ const DiveLogForm = ({ editMode, diveLogId, toggleAddDiveSite }) => {
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const [diveSites, setDiveSites] = useState([]);
   const [diveSite, setDiveSite] = useState();
 
   const [diveTypes, setDiveTypes] = useState([]);
@@ -40,15 +39,6 @@ const DiveLogForm = ({ editMode, diveLogId, toggleAddDiveSite }) => {
   const [airUnit, setAirUnit] = useState();
   const [tempUnit, setTempUnit] = useState();
   const [diveWeightUnit, setDiveWeightUnit] = useState();
-
-  const fetchDiveSites = async () => {
-    try {
-      const response = await Client.get('/api/diveSites');
-      setDiveSites(response.data);
-    } catch (error) {
-      console.error('Error fetching dive sites:', error);
-    }
-  }
 
   const fetchDiveTypes = async () => {
     try {
@@ -122,6 +112,11 @@ const DiveLogForm = ({ editMode, diveLogId, toggleAddDiveSite }) => {
       setIsSubmitted(false);
     }
   };
+
+  useEffect(() => {
+    fetchDiveSites();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [diveSites]);
 
   const handleTempSliderChange = (event, newValue) => {
     setTemperature(newValue);

@@ -25,7 +25,6 @@ const App = () => {
   const [isAddDiveSiteOpen, setIsAddDiveSiteOpen] = useState(false);
 
   const toggleAddDiveSite = (open) => () => {
-    console.log('toggleAddDiveSite', open);
     setIsAddDiveSiteOpen(open);
   };
 
