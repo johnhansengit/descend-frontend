@@ -3,7 +3,7 @@ import Client from '../../services/api';
 import { useForm } from 'react-hook-form';
 import { useStore } from '../../services/store';
 import DirtyAlert from './DirtyAlert';
-import { FormLabel, RadioGroup, Radio, Typography, Box, Grid, TextField, Button, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Slider, Checkbox, CircularProgress } from '@mui/material';
+import { ListItemText, FormLabel, RadioGroup, Radio, Typography, Box, Grid, TextField, Button, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Slider, Checkbox, CircularProgress } from '@mui/material';
 
 const DiveLogForm = ({ editMode, diveLogId }) => {
 
@@ -16,6 +16,9 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
   const tank = watch('tank');
 
   const [isLoading, setIsLoading] = useState(false)
+
+  const [diveTypes, setDiveTypes] = useState([]);
+  const [diveType, setDiveType] = useState([1]);
 
   const [diveLogExists, setDiveLogExists] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -33,6 +36,15 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
   const [airUnit, setAirUnit] = useState();
   const [tempUnit, setTempUnit] = useState();
   const [diveWeightUnit, setDiveWeightUnit] = useState();
+
+  const fetchDiveTypes = async () => {
+    try {
+      const response = await Client.get('/api/diveTypes');
+      setDiveTypes(response.data);
+    } catch (error) {
+      console.error('Error fetching dive types:', error);
+    }
+  };
 
   const fetchDiveLog = useCallback(async (id) => {
     try {
@@ -55,15 +67,11 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
       if (response.data) {
         const { measureDepth, measurePressure, measureTemp, measureWeight } = response.data;
 
-        console.log('preset: ', measureDepth, measurePressure, measureTemp, measureWeight)
-
         setMaxDepthUnit(measureDepth);
         setVisibilityUnit(measureDepth);
         setAirUnit(measurePressure);
         setTempUnit(measureTemp);
         setDiveWeightUnit(measureWeight);
-
-        console.log('postset: ', maxDepthUnit, visibilityUnit, airUnit, tempUnit, diveWeightUnit)
       }
     } catch (error) {
       console.error('Error fetching user settings:', error);
@@ -75,6 +83,7 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      await fetchDiveTypes();
       if (editMode && diveLogId) {
         await fetchDiveLog(diveLogId);
       } else {
@@ -119,14 +128,24 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
     handleInputChange();
   }
 
-  const onSubmit = async (data) => {
-    let diveLogData = {};
+  const handleDiveTypeChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setDiveType(value);
+    handleInputChange();
+  }
 
-    Object.keys(data).forEach(key => {
-      if (data[key] !== '') {
-        diveLogData[key] = data[key];
-      }
-    });
+
+  const onSubmit = async (data) => {
+    let diveLogData = {
+      ...data,
+      diveTypeIds: diveType,
+      gas: gas,
+      tank: tank,
+      suitType: suitType,
+      wetsuitThickness: wetsuitThickness,
+    };
 
     if (!tempSliderChanged) {
       delete diveLogData.temperature;
@@ -135,24 +154,20 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
       delete diveLogData.visibility;
     }
 
-    diveLogData.gas = gas;
-    diveLogData.tank = tank;
-    diveLogData.suitType = suitType;
-    diveLogData.wetsuitThickness = wetsuitThickness;
-
     try {
-      if (diveLogExists) {
-        await Client.put('/api/diveLogs', diveLogData);
-      } else {
-        await Client.post('/api/diveLogs', diveLogData);
-        setDiveLogExists(true);
-      }
+      const endpoint = diveLogExists ? '/api/diveLogs' : `/api/diveLogs/${diveLogId}`;
+      const method = diveLogExists ? 'put' : 'post';
+  
+      const response = await Client[method](endpoint, diveLogData);
+      console.log('Dive Log submitted:', response);
+  
       setIsDirty(false);
       setIsSubmitted(true);
     } catch (error) {
       console.error('Error submitting form:', error);
     }
   };
+  
 
   return (
     <>
@@ -203,14 +218,39 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
                     <Grid item xs={12}>
                       <TextField id="logDiveDate" type="date" label="Date" {...register('date', { required: true })} onChange={handleInputChange} fullWidth InputLabelProps={{ shrink: true }} />
                     </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="h6">Dive</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <FormControl fullWidth>
+                        <InputLabel id="logDiveType-label">Dive Type</InputLabel>
+                        <Select
+                          id="logDiveType"
+                          labelId="logDiveType-label"
+                          label="Dive Type"
+                          multiple
+                          value={diveType}
+                          {...register('diveType')}
+                          renderValue={(selected) => (
+                            selected.map(id => diveTypes.find(dType => dType.id === id)?.diveType || id).join(', ')
+                          )}
+                          onChange={handleDiveTypeChange}
+                        >
+                          {diveTypes
+                            .map((dType) => (
+                              <MenuItem key={dType.id} value={dType.id}>
+                                <Checkbox checked={diveType.includes(dType.id)} />
+                                <ListItemText primary={dType.diveType} />
+                              </MenuItem>
+                            ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
                     <Grid item xs={6}>
                       <TextField id="logDiveTimeIn" type="time" label="Time In" {...register('timeIn', { required: true })} onChange={handleInputChange} fullWidth InputLabelProps={{ shrink: true }} />
                     </Grid>
                     <Grid item xs={6}>
                       <TextField id="logDiveTimeOut" type="time" label="Time Out" {...register('timeOut', { required: true })} onChange={handleInputChange} fullWidth InputLabelProps={{ shrink: true }} />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Typography variant="h6">Dive</Typography>
                     </Grid>
                     <Grid item xs={8}>
                       <TextField id="logDiveMaxDepth" type="number" min="0" step="1" label="Max Depth" {...register('maxDepth', { required: true, valueAsNumber: true, min: { value: 0, message: 'Max Depth must be a positive number.' } })}
@@ -509,7 +549,7 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
               <CircularProgress />
             </Box>
         }
-    </Box >
+      </Box >
     </>
   );
 };
