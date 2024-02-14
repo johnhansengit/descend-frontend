@@ -10,7 +10,6 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
   const { isDirty, setIsDirty } = useStore();
   const { register, handleSubmit, setValue, watch } = useForm();
 
-  const salinity = watch('salinity');
   const wetsuitThickness = watch('wetsuitThickness');
   const gas = watch('gas');
   const tank = watch('tank');
@@ -26,6 +25,7 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
   const [temperature, setTemperature] = useState(0);
   const [visibility, setVisibility] = useState(0);
   const [suitType, setSuitType] = useState('wetsuit');
+  const [salinity, setSalinity] = useState();
 
   const [tempSliderChanged, setTempSliderChanged] = useState(false);
   const [visibilitySliderChanged, setVisibilitySliderChanged] = useState(false);
@@ -140,6 +140,11 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
     handleInputChange();
   }
 
+  const handleSalinityChange = (event) => {
+    const newValue = event.target.value;
+    setSalinity(newValue);
+    handleInputChange();
+  }
 
   const onSubmit = async (data) => {
     let diveLogData = {
@@ -152,6 +157,7 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
       tank: tank,
       suitType: suitType,
       wetsuitThickness: wetsuitThickness,
+      salinity: salinity,
     };
 
     if (!tempSliderChanged) {
@@ -343,6 +349,7 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
                           labelId="logGas-label"
                           label="Gas"
                           value={gas}
+                          {...register('gas')}
                           defaultValue="air"
                           onChange={handleInputChange}>
                           <MenuItem value="air">air</MenuItem>
@@ -358,6 +365,7 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
                           labelId="logTank-label"
                           label="Tank"
                           value={tank}
+                          {...register('tank')}
                           defaultValue={"Aluminum 11.1L/80 cu.ft."}
                           onChange={handleInputChange}>
                           <MenuItem value="Steel 15.0L/125 cu.ft.">Steel 15.0L/125 cu.ft.</MenuItem>
@@ -403,6 +411,7 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
                             labelId="logDiveWetsuitThickness-label"
                             label="Wetsuit Thickness"
                             value={wetsuitThickness}
+                            {...register('wetsuitThickness')}
                             defaultValue={"5mm"}
                             onChange={handleInputChange}>
                             <MenuItem value="2mm">2mm</MenuItem>
@@ -507,8 +516,9 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
                           aria-labelledby="logSalinity-label"
                           id="logSalinity"
                           value={salinity}
+                          {...register('salinity')}
                           row
-                          onChange={handleInputChange}
+                          onChange={handleSalinityChange}
                         >
                           <FormControlLabel value="salt" control={<Radio />} label="Salt" />
                           <FormControlLabel value="fresh" control={<Radio />} label="Fresh" />
