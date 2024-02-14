@@ -25,6 +25,7 @@ const App = () => {
   const [isAddDiveSiteOpen, setIsAddDiveSiteOpen] = useState(false);
 
   const toggleAddDiveSite = (open) => () => {
+    console.log('toggleAddDiveSite', open);
     setIsAddDiveSiteOpen(open);
   };
 
@@ -62,8 +63,8 @@ const App = () => {
           <Route path="/hub" element={<ProtectedRoute user={user}><Hub /></ProtectedRoute>} />
           <Route path="/profile-settings" element={<ProtectedRoute user={user}><ProfileSettings /></ProtectedRoute>} />
           <Route path="/dives" element={<ProtectedRoute user={user}><Dives /></ProtectedRoute>} />
-          <Route path="/log-dive" element={<ProtectedRoute user={user}><LogDive /></ProtectedRoute>} />
-          <Route path="/dive-sites/add" element={<ProtectedRoute user={user}><AddDiveSite /></ProtectedRoute>} />
+          <Route path="/log-dive" element={<ProtectedRoute user={user}><LogDive toggleAddDiveSite={toggleAddDiveSite}/></ProtectedRoute>} />
+          <Route path="/dive-sites/add" element={<ProtectedRoute user={user}><AddDiveSite toggleAddDiveSite={toggleAddDiveSite} /></ProtectedRoute>} />
           <Route path="/dive-sites/:country/:name" element={<DiveSiteDetail />} />
           <Route path="/dive-sites" element={<ProtectedRoute user={user}><DiveSites /></ProtectedRoute>} />
         </Routes>

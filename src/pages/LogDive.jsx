@@ -1,9 +1,9 @@
 import DiveLogForm from '../components/forms/DiveLogForm'
 
-const LogDive = () => {
+const LogDive = ({ toggleAddDiveSite }) => {
   return (
     <div>
-      <DiveLogForm />
+      <DiveLogForm toggleAddDiveSite={toggleAddDiveSite}/>
     </div>
   )
 }

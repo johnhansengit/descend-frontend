@@ -3,9 +3,10 @@ import Client from '../../services/api';
 import { useForm } from 'react-hook-form';
 import { useStore } from '../../services/store';
 import DirtyAlert from './DirtyAlert';
+import { AddLocation } from '@mui/icons-material';
 import { ListItemText, FormLabel, RadioGroup, Radio, Typography, Box, Grid, TextField, Button, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Slider, Checkbox, CircularProgress } from '@mui/material';
 
-const DiveLogForm = ({ editMode, diveLogId }) => {
+const DiveLogForm = ({ editMode, diveLogId, toggleAddDiveSite }) => {
 
   const { isDirty, setIsDirty } = useStore();
   const { register, handleSubmit, setValue, watch } = useForm();
@@ -249,7 +250,7 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
               >
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <Grid container spacing={2}>
-                    <Grid item xs={12}>
+                    <Grid item xs={8}>
                       <FormControl fullWidth>
                         <InputLabel id="logDiveSite-label">Dive Site</InputLabel>
                         <Select
@@ -271,6 +272,19 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
                             ))}
                         </Select>
                       </FormControl>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Button
+                        variant='contained'
+                        disableElevation
+                        size="large"
+                        startIcon={<AddLocation />}
+                        fullWidth
+                        sx={{ height: '100%', backgroundColor: (theme) => theme.palette.accent.main }}
+                        onClick={() => toggleAddDiveSite(true)()}
+                      >
+                        Add Site
+                      </Button>
                     </Grid>
                     <Grid item xs={12}>
                       <TextField id="logDiveDate" type="date" label="Date" {...register('date', { required: true })} onChange={handleInputChange} fullWidth InputLabelProps={{ shrink: true }} />

@@ -20,7 +20,7 @@ const AddDiveSite = ({ open, onClose }) => {
           },
         }}
       >
-        <DiveSiteForm />
+        <DiveSiteForm onClose={onClose}/>
       </Drawer>
     </div>
   );

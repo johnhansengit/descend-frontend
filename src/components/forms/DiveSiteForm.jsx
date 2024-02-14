@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { useStore } from '../../services/store';
 import { ft2m } from '../../helpers/conversionUtils';
 import Client from '../../services/api';
 import { getNames } from 'country-list';
 import { Grid, Slider, TextField, Button, Box, Typography, FormControl, InputLabel, Select, MenuItem, FormControlLabel, RadioGroup, Radio, Alert } from '@mui/material';
 
-const DiveSiteForm = () => {
-
-  const navigate = useNavigate();
+const DiveSiteForm = ({ onClose }) => {
 
   const user = useStore(state => state.user);
 
@@ -22,6 +19,7 @@ const DiveSiteForm = () => {
   const current = watch('current');
   const [depth, setDepth] = useState([0, 40]);
   const [sliderChanged, setSliderChanged] = useState(false);
+  const [sliderMax, setSliderMax] = useState(40);
 
   const [countries, setCountries] = useState([]);
 
@@ -31,17 +29,12 @@ const DiveSiteForm = () => {
   };
 
   useEffect(() => {
-    if (depthUnit === 'ft') {
-      setDepth([depth[0], 130]);
-    } else {
-      setDepth([depth[0], 40]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [depthUnit]);
-
-  useEffect(() => {
     setCountries(getNames());
   }, []);
+
+  useEffect(() => {
+    setSliderMax(depthUnit === 'ft' ? 130 : 40);
+  }, [depthUnit]);
 
   useEffect(() => {
     const checkDiveSiteDuplicate = async () => {
@@ -68,20 +61,20 @@ const DiveSiteForm = () => {
       }
 
       delete data.depthUnit;
-      data.userId = user.id
+      data.userId = user.id;
 
       const response = await Client.post('/api/diveSites/add', data);
 
       console.log('Success:', response.data);
 
+      onClose();
       reset();
-
-      navigate(`/dive-sites/${encodeURIComponent(data.country)}/${encodeURIComponent(data.name)}`);
 
     } catch (error) {
       console.error('Error:', error);
     }
   };
+
 
 
   return (
@@ -112,7 +105,7 @@ const DiveSiteForm = () => {
         name="name"
         autoComplete="name"
         autoFocus
-        {...register('name', { required: true })}
+        {...register('name')}
       />
       {errors.name && <Alert severity="error">This field is required</Alert>}
       <FormControl fullWidth margin="normal">
@@ -122,7 +115,7 @@ const DiveSiteForm = () => {
           id="divesiteCountry"
           value={country}
           label="Country"
-          {...register('country', { required: true })}
+          {...register('country')}
         >
           <MenuItem value="">
             <em>Select country</em>
@@ -152,7 +145,7 @@ const DiveSiteForm = () => {
               valueLabelDisplay="auto"
               aria-labelledby="depth-slider"
               min={0}
-              max={depthUnit === 'ft' ? 130 : 40}
+              max={sliderMax}
               sx={{
                 color: (theme) => sliderChanged ? theme.palette.primary.main : theme.palette.greyed,
               }}
@@ -175,7 +168,7 @@ const DiveSiteForm = () => {
               value={depthUnit}
               label="Depth Unit"
               sx={{ mt: 2 }}
-              {...register('depthUnit', { required: true })}
+              {...register('depthUnit')}
             >
               <MenuItem value="">
                 <em>Select depth unit</em>
@@ -194,7 +187,7 @@ const DiveSiteForm = () => {
           id="divesiteCurrent"
           value={current}
           label="Current"
-          {...register('current', { required: true })}
+          {...register('current')}
         >
           <MenuItem value="">
             <em>Select current strength</em>
@@ -214,11 +207,11 @@ const DiveSiteForm = () => {
         name="description"
         multiline
         rows={4}
-        {...register('description', { required: true })}
+        {...register('description')}
       />
       {errors.description && <Alert severity="error">This field is required</Alert>}
       <FormControl component="fieldset" fullWidth margin="normal">
-        <RadioGroup row aria-label="salinity" name="salinity" {...register('salinity', { required: true })}>
+        <RadioGroup row aria-label="salinity" name="salinity" {...register('salinity')}>
           <FormControlLabel value="salt" control={<Radio />} label="Salt" />
           <FormControlLabel value="fresh" control={<Radio />} label="Fresh" />
           <FormControlLabel value="brackish" control={<Radio />} label="Brackish" />
