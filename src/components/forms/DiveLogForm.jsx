@@ -16,6 +16,9 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
 
   const [isLoading, setIsLoading] = useState(false)
 
+  const [diveSites, setDiveSites] = useState([]);
+  const [diveSite, setDiveSite] = useState();
+
   const [diveTypes, setDiveTypes] = useState([]);
   const [diveType, setDiveType] = useState([1]);
 
@@ -36,6 +39,15 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
   const [airUnit, setAirUnit] = useState();
   const [tempUnit, setTempUnit] = useState();
   const [diveWeightUnit, setDiveWeightUnit] = useState();
+
+  const fetchDiveSites = async () => {
+    try {
+      const response = await Client.get('/api/diveSites');
+      setDiveSites(response.data);
+    } catch (error) {
+      console.error('Error fetching dive sites:', error);
+    }
+  }
 
   const fetchDiveTypes = async () => {
     try {
@@ -83,6 +95,7 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      await fetchDiveSites();
       await fetchDiveTypes();
       if (editMode && diveLogId) {
         await fetchDiveLog(diveLogId);
@@ -129,6 +142,14 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
     } else {
       setIsWetsuitThicknessVisible(false);
     }
+    handleInputChange();
+  }
+
+  const handleDiveSiteChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setDiveSite(value);
     handleInputChange();
   }
 
@@ -228,6 +249,29 @@ const DiveLogForm = ({ editMode, diveLogId }) => {
               >
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <FormControl fullWidth>
+                        <InputLabel id="logDiveSite-label">Dive Site</InputLabel>
+                        <Select
+                          id="logDiveSite"
+                          labelId="logDiveSite-label"
+                          label="Dive Site"
+                          value={diveSite}
+                          {...register('diveSiteId', { required: true })}
+                          renderValue={(selected) => (
+                            diveSites.find(site => site.id === selected)?.name || selected
+                          )}
+                          onChange={handleDiveSiteChange}
+                        >
+                          {diveSites
+                            .map((site) => (
+                              <MenuItem key={site.id} value={site.id}>
+                                <ListItemText primary={site.name} />
+                              </MenuItem>
+                            ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
                     <Grid item xs={12}>
                       <TextField id="logDiveDate" type="date" label="Date" {...register('date', { required: true })} onChange={handleInputChange} fullWidth InputLabelProps={{ shrink: true }} />
                     </Grid>
