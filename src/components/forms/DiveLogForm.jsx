@@ -1,10 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import Client from '../../services/api';
 import { useForm } from 'react-hook-form';
 import { useStore } from '../../services/store';
 import DirtyAlert from './DirtyAlert';
 import { AddLocation } from '@mui/icons-material';
-import { ListItemText, FormLabel, RadioGroup, Radio, Typography, Box, Grid, TextField, Button, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Slider, Checkbox, CircularProgress } from '@mui/material';
+import { ListItemText, ListSubheader, FormLabel, RadioGroup, Radio, Typography, Box, Grid, TextField, Button, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Slider, Checkbox, CircularProgress } from '@mui/material';
 
 const DiveLogForm = ({ editMode, diveLogId, toggleAddDiveSite }) => {
 
@@ -115,8 +115,21 @@ const DiveLogForm = ({ editMode, diveLogId, toggleAddDiveSite }) => {
 
   useEffect(() => {
     fetchDiveSites();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diveSites]);
+
+  const groupedDiveSites = useMemo(() => {
+    return diveSites.reduce((acc, site) => {
+      if (!acc[site.country]) {
+        acc[site.country] = [];
+      }
+
+      acc[site.country].push(site);
+
+      return acc;
+    }, {});
+  }, [diveSites]);
+
 
   const handleTempSliderChange = (event, newValue) => {
     setTemperature(newValue);
@@ -259,12 +272,16 @@ const DiveLogForm = ({ editMode, diveLogId, toggleAddDiveSite }) => {
                           )}
                           onChange={handleDiveSiteChange}
                         >
-                          {diveSites
-                            .map((site) => (
+                          {Object.keys(groupedDiveSites).map((country) => [
+                            <ListSubheader key={country} component="div" disableSticky disabled>
+                              {country}
+                            </ListSubheader>,
+                            ...groupedDiveSites[country].map((site) => (
                               <MenuItem key={site.id} value={site.id}>
                                 <ListItemText primary={site.name} />
                               </MenuItem>
-                            ))}
+                            ))
+                          ])}
                         </Select>
                       </FormControl>
                     </Grid>
