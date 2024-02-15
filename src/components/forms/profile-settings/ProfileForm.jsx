@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Client from '../../../services/api';
 import { useForm, Controller, useWatch } from 'react-hook-form';
 import { useStore } from '../../../services/store';
-import { Typography, Box, Grid, TextField, Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { Alert, Typography, Box, Grid, TextField, Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 
 const ProfileForm = () => {
 
@@ -184,7 +184,7 @@ const ProfileForm = () => {
                                 color: (theme) => theme.palette.text.primary,
                                 '&:hover': {
                                     backgroundColor: (theme) => theme.palette.secondary.main,
-                                  }
+                                }
                             }}
                         >
                             {profileExists ? 'Update' : 'Submit'}
@@ -193,9 +193,7 @@ const ProfileForm = () => {
                 </Grid>
             </form>
             {isSubmitted && (
-                <div>
-                    Profile Updated!
-                </div>
+                <Alert severity="success" fullWidth sx={{ mt: 1}}>Success!</Alert>
             )}
         </Box>
     );

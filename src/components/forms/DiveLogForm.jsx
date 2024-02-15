@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useStore } from '../../services/store';
 import DirtyAlert from './DirtyAlert';
 import { AddLocation } from '@mui/icons-material';
-import { ListItemText, ListSubheader, FormLabel, RadioGroup, Radio, Typography, Box, Grid, TextField, Button, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Slider, Checkbox, CircularProgress } from '@mui/material';
+import { Alert, ListItemText, ListSubheader, FormLabel, RadioGroup, Radio, Typography, Box, Grid, TextField, Button, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Slider, Checkbox, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const DiveLogForm = ({ toggleAddDiveSite }) => {
@@ -654,13 +654,9 @@ const DiveLogForm = ({ toggleAddDiveSite }) => {
                     </Grid>
                   </Grid>
                 </form>
-                {
-                  isSubmitted && (
-                    <div>
-                      Dive Log Updated!
-                    </div>
-                  )
-                }
+                {isSubmitted && (
+                <Alert severity="success" fullWidth sx={{ mt: 1}}>Success!</Alert>
+            )}
               </Box >
             </>
             :
