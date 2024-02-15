@@ -62,6 +62,7 @@ const App = () => {
           <Route path="/hub" element={<ProtectedRoute user={user}><Hub /></ProtectedRoute>} />
           <Route path="/profile-settings" element={<ProtectedRoute user={user}><ProfileSettings /></ProtectedRoute>} />
           <Route path="/dives" element={<ProtectedRoute user={user}><Dives /></ProtectedRoute>} />
+          <Route path="/dives/:id" element={<ProtectedRoute user={user}><LogDive toggleAddDiveSite={toggleAddDiveSite}/></ProtectedRoute>} />
           <Route path="/log-dive" element={<ProtectedRoute user={user}><LogDive toggleAddDiveSite={toggleAddDiveSite}/></ProtectedRoute>} />
           <Route path="/dive-sites/add" element={<ProtectedRoute user={user}><AddDiveSite toggleAddDiveSite={toggleAddDiveSite} /></ProtectedRoute>} />
           <Route path="/dive-sites/:country/:name" element={<DiveSiteDetail />} />

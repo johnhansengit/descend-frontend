@@ -47,15 +47,15 @@ const Nav = ({ handleLogOut, toggleAddDiveSite }) => {
           <ListItem button component={Link} to="/hub" onClick={toggleDrawer(false)}>
             <ListItemText primary="Hub" />
           </ListItem>
-          <ListItem button component={Link} to="/dives" onClick={toggleDrawer(false)}>
+          {/* <ListItem button component={Link} to="/dives" onClick={toggleDrawer(false)}>
             <ListItemText primary="My Dives" />
-          </ListItem>
+          </ListItem> */}
           <ListItem button component={Link} to="/log-dive" onClick={toggleDrawer(false)}>
             <ListItemText primary="Log a Dive" />
           </ListItem>
-          <ListItem button component={Link} to="/dive-sites" onClick={toggleDrawer(false)}>
+          {/* <ListItem button component={Link} to="/dive-sites" onClick={toggleDrawer(false)}>
             <ListItemText primary="Dive Sites" />
-          </ListItem>
+          </ListItem> */}
           <ListItem button onClick={handleAddDiveSiteClick}>
             <ListItemText primary="Add a Dive Site" />
           </ListItem>

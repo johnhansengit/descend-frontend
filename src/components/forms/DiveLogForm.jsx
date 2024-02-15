@@ -6,7 +6,9 @@ import DirtyAlert from './DirtyAlert';
 import { AddLocation } from '@mui/icons-material';
 import { ListItemText, ListSubheader, FormLabel, RadioGroup, Radio, Typography, Box, Grid, TextField, Button, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Slider, Checkbox, CircularProgress } from '@mui/material';
 
-const DiveLogForm = ({ editMode, diveLogId, toggleAddDiveSite }) => {
+const DiveLogForm = ({ toggleAddDiveSite }) => {
+
+  const diveLogId = window.location.pathname.split('/').pop();
 
   const { isDirty, setIsDirty, diveSites, fetchDiveSites } = useStore();
   const { register, handleSubmit, setValue, watch } = useForm();
@@ -88,7 +90,7 @@ const DiveLogForm = ({ editMode, diveLogId, toggleAddDiveSite }) => {
     const fetchData = async () => {
       await fetchDiveSites();
       await fetchDiveTypes();
-      if (editMode && diveLogId) {
+      if (diveLogId) {
         await fetchDiveLog(diveLogId);
       } else {
         await fetchUserSettings();
