@@ -26,12 +26,14 @@ const DiveSiteCardMini = () => {
                         >
                             <CardActionArea>
                                 <CardContent
-                                    display="flex"
-                                    flexDirection="column"
-                                    justifyContent="flex-end"
-                                    alignItems="flex-start"
-                                    gap={0}
-                                    height="100%"
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'flex-start',
+                                        alignItems: 'flex-start',
+                                        gap: 0,
+                                        height: '100%',
+                                    }}
                                 >
                                     <h2 style={{ marginBottom: 5 }}>{diveSite.name}</h2>
                                     <h4 style={{ marginTop: 1, marginBottom: 0 }}>{diveSite.country}</h4>

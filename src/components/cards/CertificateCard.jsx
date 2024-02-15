@@ -56,7 +56,8 @@ const CertificateCard = () => {
                                 position: 'relative',
                             }}>
                                 <IconButton aria-label="delete" size="small" style={{ position: 'absolute', right: 0, top: 0 }} onClick={() => deleteCertification(certification.id)}>
-                                    <DeleteIcon sx={{ ":hover": { cursor: "pointer" } }} />                  </IconButton>
+                                    <DeleteIcon sx={{ ":hover": { cursor: "pointer" } }} />
+                                </IconButton>
                                 <Typography variant="h6" sx={{ mt: 2 }}>{certification.CertificationRequirement.name}</Typography>
                                 <Typography variant="body1" sx={{ mb: 1.5 }}>{certification.issueDate}</Typography>
                                 <Typography variant="body2">{certification.diveShop}</Typography>
