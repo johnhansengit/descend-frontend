@@ -294,7 +294,14 @@ const DiveLogForm = ({ toggleAddDiveSite }) => {
                         size="large"
                         startIcon={<AddLocation />}
                         fullWidth
-                        sx={{ height: '100%', backgroundColor: (theme) => theme.palette.accent.main }}
+                        sx={{ 
+                          height: '100%', 
+                          backgroundColor: (theme) => theme.palette.accent.main,
+                          color: (theme) => theme.palette.text.primary, 
+                          '&:hover': {
+                            backgroundColor: (theme) => theme.palette.secondary.main,
+                          }
+                        }}
                         onClick={() => toggleAddDiveSite(true)()}
                       >
                         Add Site
@@ -613,7 +620,16 @@ const DiveLogForm = ({ toggleAddDiveSite }) => {
                         InputLabelProps={{ shrink: true }} />
                     </Grid>
                     <Grid item xs={12}>
-                      <Button type="submit" fullWidth sx={{ backgroundColor: (theme) => theme.palette.accent.main }}>
+                      <Button
+                        type="submit"
+                        fullWidth sx={{
+                          color: (theme) => theme.palette.text.primary,
+                          backgroundColor: (theme) => theme.palette.accent.main,
+                          '&:hover': {
+                            backgroundColor: (theme) => theme.palette.secondary.main,
+                          }
+                        }}
+                      >
                         {diveLogExists ? 'Update' : 'Submit'}
                       </Button>
                     </Grid>

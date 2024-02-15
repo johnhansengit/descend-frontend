@@ -250,6 +250,10 @@ const ChangeUserInfoForm = () => {
           mt: 3,
           mb: 2,
           backgroundColor: (theme) => theme.palette.accent.main,
+          color: (theme) => theme.palette.text.primary,
+          '&:hover': {
+            backgroundColor: (theme) => theme.palette.secondary.main,
+          }
         }}
         disabled={!formValues.password}
       >

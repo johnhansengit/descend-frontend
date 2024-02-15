@@ -49,7 +49,7 @@ const ProfileSettings = () => {
                 width: '100%',
                 maxWidth: 600,
                 display: 'flex',
-                flexDirection: 'column',    
+                flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
             }}>
@@ -74,7 +74,13 @@ const ProfileSettings = () => {
                     overflow: 'hidden',
                 }}
             >
-                <Accordion expanded={expanded === 'profile'} onChange={handleChange('profile')}>
+                <Accordion
+                    expanded={expanded === 'profile'}
+                    onChange={handleChange('profile')}
+                    sx={{
+                        backgroundColor: (theme) => theme.palette.foreground,
+                    }}
+                >
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography>Profile</Typography>
                     </AccordionSummary>
@@ -83,7 +89,13 @@ const ProfileSettings = () => {
                     </AccordionDetails>
                 </Accordion>
 
-                <Accordion expanded={expanded === 'certifications'} onChange={handleChange('certifications')}>
+                <Accordion
+                    expanded={expanded === 'certifications'}
+                    onChange={handleChange('certifications')}
+                    sx={{
+                        backgroundColor: (theme) => theme.palette.foreground,
+                    }}
+                >
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography>Certifications</Typography>
                     </AccordionSummary>
@@ -92,7 +104,13 @@ const ProfileSettings = () => {
                     </AccordionDetails>
                 </Accordion>
 
-                <Accordion expanded={expanded === 'previousDives'} onChange={handleChange('previousDives')}>
+                <Accordion
+                    expanded={expanded === 'previousDives'}
+                    onChange={handleChange('previousDives')}
+                    sx={{
+                        backgroundColor: (theme) => theme.palette.foreground,
+                    }}
+                >
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography>Previous Dives</Typography>
                     </AccordionSummary>
@@ -101,7 +119,13 @@ const ProfileSettings = () => {
                     </AccordionDetails>
                 </Accordion>
 
-                <Accordion  expanded={expanded === 'settings'} onChange={handleChange('settings')}>
+                <Accordion
+                    expanded={expanded === 'settings'}
+                    onChange={handleChange('settings')}
+                    sx={{
+                        backgroundColor: (theme) => theme.palette.foreground,
+                    }}
+                >
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography>Settings</Typography>
                     </AccordionSummary>
@@ -110,7 +134,13 @@ const ProfileSettings = () => {
                     </AccordionDetails>
                 </Accordion>
 
-                <Accordion expanded={expanded === 'update'} onChange={handleChange('update')}>
+                <Accordion
+                    expanded={expanded === 'update'}
+                    onChange={handleChange('update')}
+                    sx={{
+                        backgroundColor: (theme) => theme.palette.foreground,
+                    }}
+                >
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography>Update Username or Login</Typography>
                     </AccordionSummary>

@@ -57,6 +57,7 @@ const App = () => {
           sx={{
             color: (theme) => theme.palette.secondary.main,
             textAlign: 'left',
+            fontWeight: 700,
           }}
         >
           DESCEND

@@ -113,7 +113,16 @@ const CertificatesForm = () => {
             <TextField id="certificationInstructorNo" label="Instructor Number" {...register('instructorNo')} onChange={handleInputChange} fullWidth />
           </Grid>
           <Grid item xs={12}>
-            <Button type="submit" fullWidth sx={{ backgroundColor: (theme) => theme.palette.accent.main }}>
+            <Button
+              type="submit"
+              fullWidth sx={{
+                backgroundColor: (theme) => theme.palette.accent.main,
+                color: (theme) => theme.palette.text.primary,
+                '&:hover': {
+                  backgroundColor: (theme) => theme.palette.secondary.main,
+                }
+              }}
+            >
               Submit
             </Button>
           </Grid>

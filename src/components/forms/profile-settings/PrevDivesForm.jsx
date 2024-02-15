@@ -120,7 +120,17 @@ const PrevDivesForm = ({ userId }) => {
               </Grid>
             ))}
           <Grid item xs={12}>
-            <Button type="submit" fullWidth sx={{ backgroundColor: (theme) => theme.palette.accent.main }}>
+            <Button
+              type="submit"
+              fullWidth
+              sx={{
+                backgroundColor: (theme) => theme.palette.accent.main,
+                color: (theme) => theme.palette.text.primary,
+                '&:hover': {
+                  backgroundColor: (theme) => theme.palette.secondary.main,
+                }
+              }}
+            >
               {prevDivesData ? 'Update' : 'Submit'}
             </Button>
           </Grid>

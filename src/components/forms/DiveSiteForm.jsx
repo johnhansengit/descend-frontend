@@ -227,6 +227,10 @@ const DiveSiteForm = ({ onClose }) => {
           mt: 2,
           mb: 1.5,
           backgroundColor: (theme) => theme.palette.accent.main,
+          color: (theme) => theme.palette.text.primary,
+          '&:hover': {
+            backgroundColor: (theme) => theme.palette.secondary.main,
+          }
         }}
         disabled={isDiveSiteDuplicate}
       >
@@ -240,6 +244,10 @@ const DiveSiteForm = ({ onClose }) => {
           mb: 2,
           width: '30%',
           backgroundColor: (theme) => theme.palette.warning.main,
+          color: (theme) => theme.palette.text.primary,
+          '&:hover': {
+            backgroundColor: (theme) => theme.palette.secondary.main,
+          }
         }}
         onClick={onClose}
       >

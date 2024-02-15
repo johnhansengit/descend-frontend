@@ -51,7 +51,7 @@ const SettingsForm = () => {
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2}>
-        <Grid item xs={12}>
+          <Grid item xs={12}>
             <Typography>Color Theme</Typography>
           </Grid>
           <Grid item xs={12}>
@@ -229,7 +229,17 @@ const SettingsForm = () => {
             </FormControl>
           </Grid>
           <Grid item xs={12}>
-            <Button type="submit" fullWidth sx={{ backgroundColor: (theme) => theme.palette.accent.main }}>
+            <Button
+              type="submit"
+              fullWidth
+              sx={{
+                backgroundColor: (theme) => theme.palette.accent.main,
+                color: (theme) => theme.palette.text.primary,
+                '&:hover': {
+                  backgroundColor: (theme) => theme.palette.secondary.main,
+                }
+              }}
+            >
               Update
             </Button>
           </Grid>

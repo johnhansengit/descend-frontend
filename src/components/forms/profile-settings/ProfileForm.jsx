@@ -84,8 +84,8 @@ const ProfileForm = () => {
                 borderRadius: 2,
             }}
         >
-            <Typography 
-                variant="h4" 
+            <Typography
+                variant="h4"
                 sx={{ mb: 2 }}
             >
                 Profile
@@ -176,7 +176,17 @@ const ProfileForm = () => {
                         <TextField id="profileDiveInsuranceNo" label="Dive Insurance Number" {...register('diveInsuranceNo')} onChange={handleInputChange} fullWidth InputLabelProps={{ shrink: true }} />
                     </Grid>
                     <Grid item xs={12}>
-                        <Button type="submit" fullWidth sx={{ backgroundColor: (theme) => theme.palette.accent.main }}>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            sx={{
+                                backgroundColor: (theme) => theme.palette.accent.main,
+                                color: (theme) => theme.palette.text.primary,
+                                '&:hover': {
+                                    backgroundColor: (theme) => theme.palette.secondary.main,
+                                  }
+                            }}
+                        >
                             {profileExists ? 'Update' : 'Submit'}
                         </Button>
                     </Grid>
