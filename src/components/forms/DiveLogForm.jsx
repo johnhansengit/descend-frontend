@@ -10,7 +10,7 @@ const DiveLogForm = ({ toggleAddDiveSite }) => {
 
   const diveLogId = window.location.pathname.split('/').pop();
 
-  const { isDirty, setIsDirty, diveSites, fetchDiveSites } = useStore();
+  const { isDirty, setIsDirty, diveSites, fetchDiveSites, updateCount } = useStore();
   const { register, handleSubmit, setValue, watch } = useForm();
 
   const wetsuitThickness = watch('wetsuitThickness');
@@ -118,7 +118,7 @@ const DiveLogForm = ({ toggleAddDiveSite }) => {
   useEffect(() => {
     fetchDiveSites();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [diveSites]);
+  }, [updateCount]);
 
   const groupedDiveSites = useMemo(() => {
     return diveSites.reduce((acc, site) => {

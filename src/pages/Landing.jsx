@@ -47,7 +47,9 @@ const Landing = ({ setUser }) => {
                         fontWeight: 900,
                         padding: '10px 30px',
                         margin: '50px 0',
-                    
+                        '&:hover': {
+                            backgroundColor: (theme) => theme.palette.warning.main,
+                        }
                     }}
                     onClick={() => navigate('/hub')}
                 >

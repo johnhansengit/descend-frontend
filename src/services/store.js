@@ -3,10 +3,14 @@ import themes from '../../themes';
 import Client from '../services/api';
 
 export const useStore = create(set => ({
-  isDirty: false,
   user: null,
-  setIsDirty: (value) => set({ isDirty: value }),
   setUser: (user) => set({ user }),
+
+  isDirty: false,
+  setIsDirty: (value) => set({ isDirty: value }),
+  
+  updateCount: 0,
+  setUpdateCount: (value) => set({ updateCount: value }),
 
   diveSites: [],
   fetchDiveSites: async () => {
