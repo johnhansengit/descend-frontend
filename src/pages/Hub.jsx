@@ -15,6 +15,8 @@ const Hub = () => {
       justifyContent="center"
       alignItems="center"
       minHeight="100vh"
+      pt={2}
+      pb={10}
       sx={{
         backgroundColor: (theme) => theme.palette.primary.main,
         color: (theme) => theme.palette.text.primary,

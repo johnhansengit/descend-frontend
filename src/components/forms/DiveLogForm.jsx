@@ -12,7 +12,7 @@ const DiveLogForm = ({ toggleAddDiveSite }) => {
   const pathParts = window.location.pathname.split('/');
   const lastPart = pathParts.pop();
   const diveLogId = isNaN(lastPart) ? null : lastPart;
-  
+
   const navigate = useNavigate();
 
   const { isDirty, setIsDirty, diveSites, fetchDiveSites, updateCount } = useStore();
@@ -239,6 +239,8 @@ const DiveLogForm = ({ toggleAddDiveSite }) => {
         justifyContent="center"
         alignItems="center"
         minHeight="100vh"
+        pt={2}
+        pb={10}
         sx={{
           backgroundColor: (theme) => theme.palette.primary.main,
           color: (theme) => theme.palette.text.primary,
@@ -311,10 +313,10 @@ const DiveLogForm = ({ toggleAddDiveSite }) => {
                         size="large"
                         startIcon={<AddLocation />}
                         fullWidth
-                        sx={{ 
-                          height: '100%', 
+                        sx={{
+                          height: '100%',
                           backgroundColor: (theme) => theme.palette.accent.main,
-                          color: (theme) => theme.palette.text.primary, 
+                          color: (theme) => theme.palette.text.primary,
                           '&:hover': {
                             backgroundColor: (theme) => theme.palette.secondary.main,
                           }
