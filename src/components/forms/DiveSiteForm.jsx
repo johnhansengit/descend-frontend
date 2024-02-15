@@ -89,6 +89,7 @@ const DiveSiteForm = ({ onClose }) => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        overflow: 'hidden',
         backgroundColor: (theme) => theme.palette.foreground,
         color: (theme) => theme.palette.text.primary,
         fontFamily: (theme) => theme.typography.fontFamily,
@@ -223,8 +224,8 @@ const DiveSiteForm = ({ onClose }) => {
         fullWidth
         variant="contained"
         sx={{
-          mt: 3,
-          mb: 2,
+          mt: 2,
+          mb: 1.5,
           backgroundColor: (theme) => theme.palette.accent.main,
         }}
         disabled={isDiveSiteDuplicate}
@@ -232,6 +233,18 @@ const DiveSiteForm = ({ onClose }) => {
         Submit
       </Button>
       {isDiveSiteDuplicate && <Alert severity="error">A dive site with that name already exists in {country}.</Alert>}
+      <Button
+        
+        variant="contained"
+        sx={{
+          mb: 2,
+          width: '30%',
+          backgroundColor: (theme) => theme.palette.warning.main,
+        }}
+        onClick={onClose}
+      >
+        Cancel
+      </Button>
     </Box>
   );
 };

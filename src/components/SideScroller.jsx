@@ -31,7 +31,7 @@ const SideScroller = ({ Component, Title }) => {
                     fontWeight: 900,
                     ml: 5,
                     mb: 1,
-                    color: (theme) => theme.palette.secondary.main,
+                    color: (theme) => theme.palette.accent.main,
                 }}
             >
                 {Title}
@@ -44,7 +44,7 @@ const SideScroller = ({ Component, Title }) => {
                 <IconButton
                     onClick={() => handleScroll('left')}
                     sx={{
-                        color: (theme) => theme.palette.warning.main,
+                        color: (theme) => theme.palette.accent.main,
                         '& svg': { fontSize: '3rem' }
                     }}
                 >
@@ -78,7 +78,7 @@ const SideScroller = ({ Component, Title }) => {
                 <IconButton
                     onClick={() => handleScroll('right')}
                     sx={{
-                        color: (theme) => theme.palette.warning.main,
+                        color: (theme) => theme.palette.accent.main,
                         '& svg': { fontSize: '3rem' }
                     }}
                 >

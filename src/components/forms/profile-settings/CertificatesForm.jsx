@@ -58,6 +58,9 @@ const CertificatesForm = () => {
         fontFamily: (theme) => theme.typography.fontFamily,
         p: 3,
         borderRadius: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
       }}
     >
       <Typography
@@ -66,55 +69,11 @@ const CertificatesForm = () => {
       >
         Certifications
       </Typography>
-      <SideScroller Component={CertificateCard} />
-      {/* <div style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        height: 'auto',
-        padding: '1em',
-        overflowX: 'auto',
-        gap: '16px',
-        flexWrap: 'nowrap',
-        borderRadius: '2px',
-        marginBottom: '1em',
+      <Box sx={{
+        width: { xs: '140%', sm: '100%' },
       }}>
-        {certifications
-          .sort((a, b) => {
-            if (a.issueDate === b.issueDate) {
-              return b.id - a.id;
-            }
-            return new Date(b.issueDate) - new Date(a.issueDate);
-          })
-          .map(certification => {
-            return (
-              <Card key={certification.id} sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                borderRadius: 2,
-                boxShadow: 4,
-                width: '400px',
-                height: '200px',
-                backgroundColor: (theme) => theme.palette.greyed
-              }}>
-                <CardContent style={{
-                  textAlign: 'center',
-                  position: 'relative',
-                }}>
-                  <IconButton aria-label="delete" size="small" style={{ position: 'absolute', right: 0, top: 0 }} onClick={() => deleteCertification(certification.id)}>
-                    <DeleteIcon sx={{ ":hover": { cursor: "pointer" } }} />                  </IconButton>
-                  <Typography variant="h6" sx={{ mt: 2 }}>{certification.CertificationRequirement.name}</Typography>
-                  <Typography variant="body1" sx={{ mb: 1.5 }}>{certification.issueDate}</Typography>
-                  <Typography variant="body2">{certification.diveShop}</Typography>
-                  <Typography variant="body2">{certification.instructor}</Typography>
-                  <Typography variant="body2">{certification.instructorNo}</Typography>
-                </CardContent>
-              </Card>
-            );
-          })}
-      </div> */}
+        <SideScroller Component={CertificateCard} />
+      </Box>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2}>
           <Grid item xs={12}>

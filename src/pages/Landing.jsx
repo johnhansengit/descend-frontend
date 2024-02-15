@@ -3,11 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Link, Typography, Box } from '@mui/material';
 import SignIn from '../components/auth/SignIn';
 import Register from '../components/auth/Register';
+import { useStore } from '../services/store';
 
-const Landing = ({ user, setUser }) => {
+const Landing = ({ setUser }) => {
     let navigate = useNavigate();
     const [authForm, setAuthForm] = useState('signin');
     const [registeredUserName, setRegisteredUserName] = useState('');
+
+    const { user } = useStore();
 
     return (
         <Box
@@ -35,7 +38,19 @@ const Landing = ({ user, setUser }) => {
             </Typography>
 
             {user ? (
-                <Button onClick={() => navigate('/hub')} color="primary">
+                <Button 
+                    variant="contained"
+                    sx={{
+                        backgroundColor: (theme) => theme.palette.accent.main,
+                        color: (theme) => theme.palette.primary.main,
+                        fontSize: 'clamp(20px, 3vw, 3vw)',
+                        fontWeight: 900,
+                        padding: '10px 30px',
+                        margin: '50px 0',
+                    
+                    }}
+                    onClick={() => navigate('/hub')}
+                >
                     Dive In
                 </Button>
             ) : (

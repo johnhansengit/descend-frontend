@@ -47,7 +47,8 @@ const CertificateCard = () => {
                             borderRadius: 2,
                             pt: 2,
                             boxShadow: 4,
-                            width: '400px',
+                            minWidth: '200px',
+                            maxWidth: '400px',
                             height: '200px',
                             backgroundColor: (theme) => theme.palette.greyed
                         }}>

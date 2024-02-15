@@ -13,7 +13,7 @@ import AddDiveSite from './pages/AddDiveSite';
 import DiveSiteDetail from './pages/DiveSiteDetail';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/auth/ProtectedRoute';
-import { ThemeProvider, AppBar, Toolbar, Box } from '@mui/material';
+import { Typography, ThemeProvider, AppBar, Toolbar, Box } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import './App.css';
 
@@ -51,6 +51,16 @@ const App = () => {
       <CssBaseline />
       <AppBar position="sticky" >
         <Toolbar >
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{
+            color: (theme) => theme.palette.secondary.main,
+            textAlign: 'left',
+          }}
+        >
+          DESCEND
+        </Typography>
           <Box sx={{ flexGrow: 1 }}></Box>
           {user && <Nav user={user} handleLogOut={handleLogOut} toggleAddDiveSite={toggleAddDiveSite} />}
         </Toolbar>
@@ -58,7 +68,7 @@ const App = () => {
       <AddDiveSite open={isAddDiveSiteOpen} onClose={toggleAddDiveSite(false)} />
       <main>
         <Routes>
-          <Route path="/" element={<Landing user={user} setUser={setUser} />} />
+          <Route path="/" element={<Landing setUser={setUser} />} />
           <Route path="/hub" element={<ProtectedRoute user={user}><Hub /></ProtectedRoute>} />
           <Route path="/profile-settings" element={<ProtectedRoute user={user}><ProfileSettings /></ProtectedRoute>} />
           <Route path="/dives" element={<ProtectedRoute user={user}><Dives /></ProtectedRoute>} />
