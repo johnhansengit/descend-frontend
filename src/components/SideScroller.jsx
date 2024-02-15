@@ -62,7 +62,7 @@ const SideScroller = ({ Component, Title }) => {
                     sx={{
                         flex: 1,
                         height: '30vh',
-                        maxHeight: 165,
+                        maxHeight: 250,
                         '&::-webkit-scrollbar': {
                             display: 'none',
                         },

@@ -2,25 +2,16 @@ import { useState, useEffect } from 'react';
 import Client from '../../../services/api';
 import { useForm, Controller } from 'react-hook-form';
 import { useStore } from '../../../services/store';
-import { Typography, Box, Grid, TextField, Button, Select, MenuItem, InputLabel, FormControl, Card, CardContent, IconButton } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Typography, Box, Grid, TextField, Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import SideScroller from '../../SideScroller'
+import CertificateCard from '../../cards/CertificateCard';
 
 
 const CertificatesForm = () => {
 
   const { isDirty, setIsDirty } = useStore();
   const { control, register, handleSubmit } = useForm();
-  const [certifications, setCertifications] = useState([]);
   const [certificationOptions, setCertificationOptions] = useState([]);
-
-  const fetchCertifications = async () => {
-    try {
-      const response = await Client.get('/api/certifications');
-      setCertifications(response.data || [])
-    } catch (error) {
-      console.error('Error fetching certification data:', error);
-    }
-  };
 
   const fetchCertificationOptions = async () => {
     try {
@@ -31,17 +22,7 @@ const CertificatesForm = () => {
     }
   };
 
-  const deleteCertification = async (id) => {
-    try {
-      await Client.delete(`/api/certifications/${id}`);
-      fetchCertifications();
-    } catch (error) {
-      console.error('Error deleting certification:', error);
-    }
-  };
-
   useEffect(() => {
-    fetchCertifications();
     fetchCertificationOptions();
   }, []);
 
@@ -63,7 +44,6 @@ const CertificatesForm = () => {
     try {
       await Client.post('/api/certifications', certificationData);
       setIsDirty(false);
-      fetchCertifications();
     } catch (error) {
       console.error('Error submitting form:', error);
     }
@@ -86,7 +66,8 @@ const CertificatesForm = () => {
       >
         Certifications
       </Typography>
-      <div style={{
+      <SideScroller Component={CertificateCard} />
+      {/* <div style={{
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'flex-start',
@@ -133,7 +114,7 @@ const CertificatesForm = () => {
               </Card>
             );
           })}
-      </div>
+      </div> */}
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
