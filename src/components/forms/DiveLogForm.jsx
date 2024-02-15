@@ -9,7 +9,10 @@ import { useNavigate } from 'react-router-dom';
 
 const DiveLogForm = ({ toggleAddDiveSite }) => {
 
-  const diveLogId = window.location.pathname.split('/').pop();
+  const pathParts = window.location.pathname.split('/');
+  const lastPart = pathParts.pop();
+  const diveLogId = isNaN(lastPart) ? null : lastPart;
+  
   const navigate = useNavigate();
 
   const { isDirty, setIsDirty, diveSites, fetchDiveSites, updateCount } = useStore();
@@ -33,6 +36,9 @@ const DiveLogForm = ({ toggleAddDiveSite }) => {
   const [visibility, setVisibility] = useState(0);
   const [suitType, setSuitType] = useState('wetsuit');
   const [salinity, setSalinity] = useState();
+
+  const [tempSliderMax, setTempSliderMax] = useState(40);
+  const [visSliderMax, setVisSliderMax] = useState(40);
 
   const [tempSliderChanged, setTempSliderChanged] = useState(false);
   const [visibilitySliderChanged, setVisibilitySliderChanged] = useState(false);
@@ -121,6 +127,14 @@ const DiveLogForm = ({ toggleAddDiveSite }) => {
     fetchDiveSites();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateCount]);
+
+  useEffect(() => {
+    setTempSliderMax(tempUnit === 'F' ? 90 : 30);
+  }, [tempUnit]);
+
+  useEffect(() => {
+    setVisSliderMax(visibilityUnit === 'ft' ? 130 : 40);
+  }, [visibilityUnit]);
 
   const groupedDiveSites = useMemo(() => {
     return diveSites.reduce((acc, site) => {
@@ -524,7 +538,7 @@ const DiveLogForm = ({ toggleAddDiveSite }) => {
                         aria-labelledby="temperature-slider"
                         value={temperature}
                         min={0}
-                        max={tempUnit === 'C' ? 30 : 90}
+                        max={tempSliderMax}
                         step={1}
                         {...register('temp')}
                         onChange={handleTempSliderChange}
@@ -564,7 +578,7 @@ const DiveLogForm = ({ toggleAddDiveSite }) => {
                         aria-labelledby="visibility-slider"
                         value={visibility}
                         min={0}
-                        max={visibilityUnit === 'ft' ? 130 : 40}
+                        max={visSliderMax}
                         step={5}
                         {...register('visibility')}
                         onChange={handleVisibilitySliderChange}
