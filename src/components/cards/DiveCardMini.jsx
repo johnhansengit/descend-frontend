@@ -69,7 +69,9 @@ const DiveSiteCardMini = () => {
                                     height: '100%',
                                 }}
                             >
-                                <Link to={`/dives/${diveLog.id}`} >
+                                <Link 
+                                    to={`/dives/${diveLog.id}`}
+                                >
                                     <h3 style={{ margin: 3 }}>{diveLog.DiveSite?.name}</h3>
                                     <p style={{ margin: 3 }}>{diveLog.DiveSite?.country}</p>
                                     <p style={{ margin: 3 }}>{diveLog.date}</p>

@@ -5,10 +5,12 @@ import { useStore } from '../../services/store';
 import DirtyAlert from './DirtyAlert';
 import { AddLocation } from '@mui/icons-material';
 import { ListItemText, ListSubheader, FormLabel, RadioGroup, Radio, Typography, Box, Grid, TextField, Button, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Slider, Checkbox, CircularProgress } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const DiveLogForm = ({ toggleAddDiveSite }) => {
 
   const diveLogId = window.location.pathname.split('/').pop();
+  const navigate = useNavigate();
 
   const { isDirty, setIsDirty, diveSites, fetchDiveSites, updateCount } = useStore();
   const { register, handleSubmit, setValue, watch } = useForm();
@@ -208,6 +210,7 @@ const DiveLogForm = ({ toggleAddDiveSite }) => {
 
       setIsDirty(false);
       setIsSubmitted(true);
+      navigate('/hub');
     } catch (error) {
       console.error('Error submitting form:', error);
     }
