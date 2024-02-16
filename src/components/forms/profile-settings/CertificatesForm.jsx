@@ -12,6 +12,7 @@ const CertificatesForm = () => {
   const { isDirty, setIsDirty } = useStore();
   const { control, register, handleSubmit } = useForm();
   const [certificationOptions, setCertificationOptions] = useState([]);
+  const [certificateSelection, setCertificateSelection] = useState('');
 
   const fetchCertificationOptions = async () => {
     try {
@@ -31,6 +32,11 @@ const CertificatesForm = () => {
       setIsDirty(true);
     }
   };
+
+  const handleCertificateSelection = (event) => {
+    setCertificateSelection(event.target.value);
+    handleInputChange();
+  }
 
   const onSubmit = async (data) => {
     let certificationData = {};
@@ -85,13 +91,18 @@ const CertificatesForm = () => {
                 defaultValue=""
                 rules={{ required: 'Certification is required' }}
                 render={({ field }) => (
-                  <Select id="certificationOptions" {...field} onChange={handleInputChange}>
-                    <MenuItem value="">Select Certification</MenuItem>:
-                    {certificationOptions.sort((a, b) => a.name.localeCompare(b.name)).map(certification => {
-                      return (
-                        <MenuItem key={certification.id} value={certification.id}>{certification.name}</MenuItem>
-                      );
-                    })}
+                  <Select
+                    id="certificationOptions"
+                    {...field} // Spread the field object into Select
+                    onChange={(event) => {
+                      field.onChange(event); // Call field's onChange to update form state
+                      handleCertificateSelection(event); // Then handle your custom logic
+                    }}
+                  >
+                    <MenuItem value="">Select Certification</MenuItem>
+                    {certificationOptions.sort((a, b) => a.name.localeCompare(b.name)).map(certification => (
+                      <MenuItem key={certification.id} value={certification.id}>{certification.name}</MenuItem>
+                    ))}
                   </Select>
                 )}
               />

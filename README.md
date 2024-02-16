@@ -3,6 +3,9 @@
 ### By: John Hansen
 **[GitHub](https://github.com/johnhansengit) | [LinkedIn](https://www.linkedin.com/in/jhansen-software-engineer/)**
 ***
+#### **_Backend Repo_**
+https://github.com/johnhansengit/descend-backend
+
 #### **_Description_**
 DESCEND is strives to be the best dive log app on the market, and the only one to integrate dive sites, social networking, and artificial intelligence. Dive into its rich, modern interface, accessible vital information, and engaging features that will keep you excited about diving. 
 
@@ -33,10 +36,9 @@ DESCEND is strives to be the best dive log app on the market, and the only one t
 #### **_Technologies_**
 **Front-End**
 - React
-- Tailwind
+- Material-UI
 - React Hook Form
 - React Router
-- React Query
 - Zustand
 
 **Back-End**
@@ -46,13 +48,6 @@ DESCEND is strives to be the best dive log app on the market, and the only one t
 
 **Database**
 - Postgres
-
-**Auth**
-- Google OAuth
-
-**APIs**
-- OpenAI
-- Google Maps
 
 #### **_Project Planning_**
 
@@ -72,6 +67,7 @@ DESCEND is strives to be the best dive log app on the market, and the only one t
 
 #### **_Stretch Goals/Future Updates_**
 - ChatGBT integration to identify sealife after your dives, based on your descriptions
+- Google Maps AI integration for Dive Sites
 - Diving weight calculator that takes into account changes in body composition, water salinity, equipment, and time since last dive
 - Badges to mark diving milestones and accomplishments
 - Tec Diving integration
@@ -79,15 +75,11 @@ DESCEND is strives to be the best dive log app on the market, and the only one t
 - Certification standards for additional dive agencies
 
 #### **_Credits_**
-- Deployment: [Fly.io](https://fly.io/)
 - UI: 
   - Fonts: [Google Fonts](fonts.google.com)
-  - Date Formatting: [Day.js](https://day.js.org/)
-  - Components: [Hover](https://hover.dev/)
-  - Icons
-    - [Font Awesome](https://fontawesome.com/)
-    - [Material Icons](https://fonts.google.com/icons) or [Material Icons](https://mui.com/material-ui/material-icons/)
-  - Graphics
+  - Date Formatting (coming soon...): [Day.js](https://day.js.org/)
+  - Components & Icons: [Material-UI](https://mui.com/)
+  - Graphics (coming soon...)
     - [GetWaves](https://getwaves.io/)
     - [Shape Divider](https://shapedivider.app/)
     - [Blobmaker](https://blobmaker.app/)
